@@ -41,7 +41,7 @@ Karl 在 [the-little-redis-book](https://github.com/karlseguin/the-little-redis-
 
 # 开始
 
-We all learn differently: some like to get their hands dirty, some like to watch videos, and some like to read. Nothing will help you understand Redis more than actually experiencing it. Redis is easy to install and comes with a simple shell that'll give us everything we need. Let's take a couple minutes and get it up and running on our machine.
+大家的学习方式不一样: 有些人喜欢动手实践，有些人喜欢看视频，还有些喜欢读文章。但是要理解 Redis ，没有什么会比动手实践更有效了。Redis 非常容易安装，还有一个简单的 shell，我们可以在上面实现一切。让我们花几分钟在你机器上安装并运行起来。
 
 ## On Windows
 
