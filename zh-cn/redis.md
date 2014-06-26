@@ -2,33 +2,33 @@
 
 ## 许可
 
-The Little Redis Book is licensed under the Attribution-NonCommercial 3.0 Unported license. You should not have paid for this book.
+本书《 The Little Redis Book 》基于 Attribution-NonCommercial 3.0 Unported license。你无须为本书付款。
 
-You are free to copy, distribute, modify or display the book. However, I ask that you always attribute the book to me, Karl Seguin, and do not use it for commercial purposes.
+你可以自由的复制，分发，修改和传阅本书。但请认可该书属于作者 Karl Seguin，并请勿将本书用于任何商业目的。
 
-You can see the *full text* of **the license at**:
+你可以在以下链接查看*完整的***许可文档**:
 
 <http://creativecommons.org/licenses/by-nc/3.0/legalcode>
 
 ## 关于作者
 
-Karl Seguin is a developer with experience across various fields and technologies. He's an active contributor to Open-Source Software projects, a technical writer and an occasional speaker. He's written various articles, as well as a few tools, about Redis. Redis powers the ranking and statistics of his free service for casual game developers: [mogade.com](http://mogade.com/).
+Karl Seguin 在多领域有着丰富经验。他参与贡献 OSS 项目, 还是技术文档撰写人而且偶尔做做演讲。他写了许多关于 Redis 的文档，以及一些工具。他用 Redis，为休闲游戏开发者写了一个免费的评级和统计服务: [mogade.com](http://mogade.com/).
 
-Karl wrote [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/), the free and popular book about MongoDB.
+Karl 还编写了 [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/)，一本关于 MongoDB 的免费且流行的好书。
 
-His blog can be found at <http://openmymind.net> and he tweets via [@karlseguin](http://twitter.com/karlseguin)
+你可以在 <http://openmymind.net> 找到他的 Blog，或者通过 [@karlseguin](http://twitter.com/karlseguin)在 Twitter 上关注他。
 
 ## 鸣谢
 
-A special thanks to [Perry Neal](https://twitter.com/perryneal) for lending me his eyes, mind and passion. You provided me with invaluable help. Thank you.
+特别感谢 [Perry Neal](https://twitter.com/perryneal)， 赐予我你的视野，精神，和热情。你赐予了我无尽的力量。感恩。
 
 ## 最新版本
 
-The latest source of this book is available at:
+本书最新代码可以在这里获得:
 <http://github.com/karlseguin/the-little-redis-book>
 
-### 中文版本
-
+### 中文版本 ###
+Karl 在 [the-little-redis-book](https://github.com/karlseguin/the-little-redis-book) 的 Github 链接中给出了 [JasonLai256](https://github.com/JasonLai256) 的 [the-little-redis-book](https://github.com/JasonLai256/the-little-redis-book) 链接。但貌似 JasonLai256 最后一次更新是2012年了。内容上也和原文稍微有点出入，并且由于本人水平有限，无法提交自信正确的内容。因此重开一项目。如果你被搜索引擎引导到本工程，在此向你致歉，并希望有能力者且有时间者一同完善和同步本工程。你可以通过我的 邮箱 <geminiyellow@gmail.com> 来联系我，或者通过 [@geminiyellow](https://twitter.com/geminiyellow) 在 Twitter 上关注我。
 # 简介
 
 Over the last couple years, the techniques and tools used for persisting and querying data have grown at an incredible pace. While it's safe to say that relational databases aren't going anywhere, we can also say that the ecosystem around data is never going to be the same.
