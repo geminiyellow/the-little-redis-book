@@ -31,13 +31,13 @@ Karl 还编写了 [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-
 Karl 在 [the-little-redis-book](https://github.com/karlseguin/the-little-redis-book) 的 Github 链接中给出了 [JasonLai256](https://github.com/JasonLai256) 的 [the-little-redis-book](https://github.com/JasonLai256/the-little-redis-book) 链接。但貌似 JasonLai256 最后一次更新是2012年了。内容上也和原文稍微有点出入，并且由于本人水平有限，无法提交自信正确的内容。因此重开一项目。如果你被搜索引擎引导到本工程，在此向你致歉，并希望有能力者且有时间者一同完善和同步本工程。你可以通过我的 邮箱 <geminiyellow@gmail.com> 来联系我，或者通过 [@geminiyellow](https://twitter.com/geminiyellow) 在 Twitter 上关注我。
 # 简介
 
-Over the last couple years, the techniques and tools used for persisting and querying data have grown at an incredible pace. While it's safe to say that relational databases aren't going anywhere, we can also say that the ecosystem around data is never going to be the same.
+在过去的几年中，在数据持久化和查询领域，技术和工具以惊人的速度在发展。可以这样说，终于再也不是只有关系型数据库一种解决案了，也就是说，数据库生态圈开始繁荣起来。
 
-Of all the new tools and solutions, for me, Redis has been the most exciting. Why? First because it's unbelievably easy to learn. Hours is the right unit to use when talking about length of time it takes to get comfortable with Redis. Secondly, it solves a specific set of problems while at the same time being quite generic. What exactly does that mean? Redis doesn't try to be all things to all data. As you get to know Redis, it'll become increasingly evident what does and what does not belong in it. And when it does, as a developer, it's a great experience.
+在众多的解决案和工具里面，对于我来说，Redis 是最激动人心的。为什么？首先因为它太容易学了。要掌握 Redis，用小时做单位足矣。其次，它在处理同一类问题的时候，用的方法基本类似。什么意思？Redis 并没有试图解决关于数据的一切问题。当你了解 Reids 之后，它能做什么不能做什么一目了然。当可以用它来做的时候，作为开发者，实在太爽了。
 
-While you can build a complete system using Redis only, I think most people will find that it supplements their more generic data solution - whether that be a traditional relational database, a document-oriented system, or something else. It's the kind of solution you use to implement specific features. In that way, it's similar to an indexing engine. You wouldn't build your entire application on Lucene. But when you need good search, it's a much better experience - for both you and your users. Of course, the similarities between Redis and indexing engines end there.
+虽然你可以只用 Redis 结构件一个完整的系统，我想大多数人都会发现作为通用数据解决案的补充会更合适 - 不管是传统的关系型数据库，面向文档系统，或者是其他什么。它是那种用来实现特定功能的解决案。就是说，它更类似于一个索引引擎。你不会把你的整个应用都构筑在 Lucene 上。单当你需要一个好的搜索引擎的时候，它会提供更好的体验 - 不管对你还是你的用户。当然，这和 Redis 于索引引擎之间的关系类似。
 
-The goal of this book is to build the foundation you'll need to master Redis. We'll focus on learning Redis' five data structures and look at various data modeling approaches. We'll also touch on some key administrative details and debugging techniques.
+本书的目的在于为你掌握 Redis 打好基础。我们将把重点放在学习使用 Redis 的五种数据结构以及各种数据建模方法。我们还会涉及一些关键的管理细节和调试技术。
 
 # 开始
 
