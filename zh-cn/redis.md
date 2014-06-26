@@ -14,7 +14,7 @@
 
 Karl Seguin 在多领域有着丰富经验。他参与贡献 OSS 项目, 还是技术文档撰写人而且偶尔做做演讲。他写了许多关于 Redis 的文档，以及一些工具。他用 Redis，为休闲游戏开发者写了一个免费的评级和统计服务: [mogade.com](http://mogade.com/).
 
-Karl 还编写了 [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/)，一本关于 MongoDB 的免费且流行的好书。
+Karl 还编写了 [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/)，一本关于 MongoDB 的免费且流行的好书。*1*
 
 你可以在 <http://openmymind.net> 找到他的 Blog，或者通过 [@karlseguin](http://twitter.com/karlseguin)在 Twitter 上关注他。
 
@@ -154,17 +154,17 @@ It's important to understand this aspect of Redis because it impacts how you int
 
 ## 小结
 
-Although we barely got to play with Redis, we did cover a wide range of topics. Don't worry if something isn't crystal clear - like querying. In the next chapter we'll go hands-on and any questions you have will hopefully answer themselves.
+虽然我们几乎把 Redis 全身上下都玩了一遍，展开了很宽泛的讨论。不过别担心，弄不清楚也不要紧 - 比如说查询。在下一章我们将动手做，实践找出那些你想得到答案的所有问题。
 
-The important takeaways from this chapter are:
+这章中我们应该明白的几个点:
 
-* Keys are strings which identify pieces of data (values)
+* Keys 是用来标识数据块(values)的字符串
 
-* Values are arbitrary byte arrays that Redis doesn't care about
+* Values 是一串任意字节数组，Redis 不关心这个
 
-* Redis exposes (and is implemented as) five specialized data structures
+* Redis 提供了 (实现了) 五种指定数据结构
 
-* Combined, the above make Redis fast and easy to use, but not suitable for every scenario
+* 综上，这让 Redis 易于使用并且很快，但是并不适用所有场景
 
 # 第二章 - 数据结构
 
@@ -292,7 +292,7 @@ We use `zrevrank` instead of `zrank` since Redis' default sort is from low to hi
 
 ## 小结
 
-That's a high level overview of Redis' five data structures. One of the neat things about Redis is that you can often do more than you first realize. There are probably ways to use string and sorted sets that no one has thought of yet. As long as you understand the normal use-case though, you'll find Redis ideal for all types of problems. Also, just because Redis exposes five data structures and various methods, don't think you need to use all of them. It isn't uncommon to build a feature while only using a handful of commands.
+本章从高层次来讲解了 Redis 的五种数据结构。使用 Redis 有一个很棒的特点就是，你能做的通常比你开始所认为的要来得多。对于 string 和 sorted sets ，肯定还有许多未被发现的用法。当你理解了正常的用例之后，你会发现 Redis 处理所有类型的问题都得心应手。还有，虽然 Redis 只提供了五种数据结构，以及相应的方法，但是不要觉得你需要把它们全用上。很少在建立一个功能的时候会这样做，只有某些很难的命令的时候才会考虑。
 
 # 第三章 - 数据结构用例
 
@@ -454,7 +454,7 @@ To get all the bug ids for an account we simply call `hkeys bugs:1233`. To delet
 
 ## 小结
 
-This chapter, combined with the previous one, has hopefully given you some insight on how to use Redis to power real features. There are a number of other patterns you can use to build all types of things, but the real key is to understand the fundamental data structures and to get a sense for how they can be used to achieve things beyond your initial perspective.
+通过本章以及前一章，希望你已经开始有感觉知道应当怎么用 Redis 去处理实际问题了。还有很多的方式，你可以用来处理所有类型的东西，不过真正的关键是理解基础数据结构，并拥有那么一种视野，知道如何摆脱原有观念，利用它们来处理新问题。
 
 # 第四章 - 数据结构以外
 
@@ -619,9 +619,9 @@ In addition to `scan`, `hscan`, `sscan` and `zscan` commands were also added. Th
 
 ## 小结
 
-This chapter focused on non-data structure-specific commands. Like everything else, their use is situational. It isn't uncommon to build an app or feature that won't make use of expiration, publication/subscription and/or sorting. But it's good to know that they are there. Also, we only touched on some of the commands. There are more, and once you've digested the material in this book it's worth going through the [full list](http://redis.io/commands).
+本章主要讲了非特定数据结构命令。和其他一样，这些命令需要按需使用。不是创建一个应用或者功能时都要用到期限，发布/订阅 和/或 排序。不过最好应当知道它们的存在。并且，我们只讲了其中一部分命令。还有更多的，当你消化了本书内容之后，应当去看看[完整功能列表](http://redis.io/commands)。
 
-# 第五章 - Lua Scripting
+# 第五章 - Lua 脚本
 
 Redis 2.6 includes a built-in Lua interpreter which developers can leverage to write more advanced queries to be executed within Redis. It wouldn't be wrong of you to think of this capability much like you might view stored procedures available in most relational databases.
 
@@ -715,7 +715,7 @@ The next chapter will talk about Redis administration and configuration in more 
 
 ## 小结
 
-This chapter introduced Redis' Lua scripting capabilities. Like anything, this feature can be abused. However, used prudently in order to implement your own custom and focused commands, it won't only simplify your code, but will likely improve performance. Lua scripting is like almost every other Redis feature/command: you make limited, if any, use of it at first only to find yourself using it more and more every day.
+本章介绍了 Redis 的 Lua 脚本功能。和其他任何事物一样，这个功能可能会被兰荣。但是，谨慎使用，以实现你所关注及自定义的命令时，不但可以简化你的代码，同时也可能会提高性能。Lua 脚本和 Redis 的其他功能/命令一样:你要作的仅仅是，如果需要，在一开始就使用它，然后你会发现它会用得越来越频繁熟练。
 
 # 第六章 - Administration
 
@@ -775,10 +775,14 @@ High availability and scaling is something that can be achieved today, as long a
 
 ## 小结
 
-Given the number of projects and sites using Redis already, there can be no doubt that Redis is production-ready, and has been for a while. However, some of the tooling, especially around security and availability is still young. Redis Cluster, which we'll hopefully see soon, should help address some of the current management challenges.
+鉴于已经开始使用 Redis 的网站以及工程的数量级，毋庸置疑，Redis 已经可用于成产，并且已经用于生产中了。但是，对于某些工具，尤其是在安全性和可用性发面，仍然略显年轻。Redis 集群，我们应该很快就可以看到的，将帮助我们解决目前管理方面的一些挑战。
 
 # 总结
 
 总的来说，Redis 代表了数据处理方式的简化。它剥离了众多的复杂性和抽象性，并可与其他系统一同使用。一些场合 Redis 并不是最好选择。但在某些场合，Redis 简直就是为你的数据量身定做一样。
 
 最后回到我一开始说的: Redis 简单易学。不停的有新技术出现，你很难说哪些值得花时间去学习。当你真正认识到 Redis 的简洁所带来的好处的时候，我由衷相信，它是你和你的团队所能做到的，在学习方面，最值得的投资之一。
+
+----------
+
+*1* : 中文版本 [the-little-mongodb-book](https://github.com/geminiyellow/the-little-mongodb-book/blob/master/zh-cn/mongodb.markdown)
