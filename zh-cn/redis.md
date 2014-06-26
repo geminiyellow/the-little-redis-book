@@ -6,7 +6,7 @@
 
 你可以自由的复制，分发，修改和传阅本书。但请认可该书属于作者 Karl Seguin，并请勿将本书用于任何商业目的。
 
-你可以在以下链接查看*完整的***许可文档**:
+你可以在以下链接查看*完整的* **许可文档**:
 
 <http://creativecommons.org/licenses/by-nc/3.0/legalcode>
 
