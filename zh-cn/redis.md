@@ -779,6 +779,6 @@ Given the number of projects and sites using Redis already, there can be no doub
 
 # 总结
 
-In a lot of ways, Redis represents a simplification in the way we deal with data. It peels away much of the complexity and abstraction available in other systems. In many cases this makes Redis the wrong choice. In others it can feel like Redis was custom-built for your data.
+总的来说，Redis 代表了数据处理方式的简化。它剥离了众多的复杂性和抽象性，并可与其他系统一同使用。一些场合 Redis 并不是最好选择。但在某些场合，Redis 简直就是为你的数据量身定做一样。
 
-Ultimately it comes back to something I said at the very start: Redis is easy to learn. There are many new technologies and it can be hard to figure out what's worth investing time into learning. When you consider the real benefits Redis has to offer with its simplicity, I sincerely believe that it's one of the best investments, in terms of learning, that you and your team can make.
+最后回到我一开始说的: Redis 简单易学。不停的有新技术出现，你很难说哪些值得花时间去学习。当你真正认识到 Redis 的简洁所带来的好处的时候，我由衷相信，它是你和你的团队所能做到的，在学习方面，最值得的投资之一。
