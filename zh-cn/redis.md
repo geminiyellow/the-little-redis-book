@@ -41,15 +41,15 @@ Karl 在 [the-little-redis-book](https://github.com/karlseguin/the-little-redis-
 
 # 开始
 
-大家的学习方式不一样: 有些人喜欢动手实践，有些人喜欢看视频，还有些喜欢读文章。但是要理解 Redis ，没有什么会比动手实践更有效了。Redis 非常容易安装，还有一个简单的 shell，我们可以在上面实现一切。让我们花几分钟在你机器上安装并运行起来。
+大家的学习方式不一样: 有些人喜欢动手实践，有些人喜欢看视频，还有些喜欢读文章。但是要理解 Redis ，没有什么会比动手实践更有效了。Redis 的安装非常容易，还有一个简单的 shell，我们可以在上面实现一切。让我们花几分钟将它安装到你机器上并运行起来。
 
 ## Windows 环境
 
-Redis 本身并不正式支持 Windows ，但也有可用选项。你不会把这些用到生产环境上的，但用在开发环境上，我没遇到过任何限制。
+Redis 本身并不正式支持 Windows ，但也有可用选项。你当然是不会把它用到生产环境上的，但用在开发的时候，我从没遇到过什么限制。
 
-其中一个来自 Microsoft Open Technologies, Inc. 的副本在这里 <https://github.com/MSOpenTech/redis>。同样,该解决案并不是为了生产环境准备的。
+来自微软开源技术公司(Microsoft Open Technologies, Inc.)的副本在这里 <https://github.com/MSOpenTech/redis>。同样,该解决案并不是为了生产环境准备的。
 
-另外一个方案，已经有一段时间了，在<https://github.com/dmajkic/redis/downloads>。你可以下载最新版本(应该是列表中最上面一个)。解压 zip 文件，根据你的环境架构，选择使用 `64bit` 或 `32bit` 
+另一个方案，已经有一段时间了，在<https://github.com/dmajkic/redis/downloads>。你可以下载最新版本(应该是列表中最上面一个)。解压 zip 文件，根据你的环境架构，选择使用 `64bit` 或 `32bit` 
 
 ## *nix 和 MacOSX 环境
 
@@ -60,17 +60,17 @@ Redis 本身并不正式支持 Windows ，但也有可用选项。你不会把�
 	cd redis-2.6.2
 	make
 
-(当然，Redis 也可以通过各种包管理工具安装。比如说，MacOSX 用户通过 Homebrew 安装只需要简单输入 `brew install redis`即可。)
+(当然，Redis 也可以通过各种包管理工具安装。比如说，MacOSX 用户通过 Homebrew 安装,只需要简单输入 `brew install redis`即可。)
 
 如果你从源码编译，二进制文件被放在 `src` 文件夹下。进入 `src` 文件夹，通过 `cd src`。
 
 ## 运行和链接 Redis
 
-如果一切正常，一份可用的 Redis 二进制文件将在你手中诞生。Redis 有一套可执行文件。我们主要使用 Redis 服务和 Redis 命令行界面 (Redis-cli，一个类 DOS 客户端)。让我们启动服务。在 Window 上，双击 `redis-server`。在 *nix/MacOSX 上，执行 `./redis-server`。
+如果一切正常，一套可用的 Redis 二进制文件将在你手中诞生。Redis 有一套可执行文件。我们主要使用 Redis 服务和 Redis 命令行界面 (Redis-cli，一个类 DOS 客户端)。先让我们启动服务。在 Window 上，双击 `redis-server`。在 *nix/MacOSX 上，执行 `./redis-server`。
 
 如果你读一下启动信息，你会看到有个警告是关于 `redis.conf` 文件找不到的。Redis 会转而使用内建的默认项，这对我们接下来的学习毫无影响。
 
-下一步，打开 Rdis 控制台，双击 `redis-cli` (Windows) 或者执行 `./redis-cli` (*nix/MacOSX)。它将会链接到本地运行的默认服务端口上 (6379)。
+下一步，打开 Redis 控制台，双击 `redis-cli` (Windows) 或者执行 `./redis-cli` (*nix/MacOSX)。它将会链接到本地运行的默认服务端口上 (6379)。
 
 你可以测试一下是否所有运转正常，在命令行界面输入 `info` 。你应该会看到一大堆的键值对，它提供了大量的关于服务状态的信息。
 
@@ -78,7 +78,7 @@ Redis 本身并不正式支持 Windows ，但也有可用选项。你不会把�
 
 # Redis 驱动
 
-很快你就会看到，Redis 的 API 描述做得非常好，就像代码中的一组方法一样。它非常简单并易于编程。也就是说，不管你是用命令行工具，或者用你喜欢的语言，所做的事情基本类似。因此，如果你想从一个编程语言开始学习它，完全没有问题。如果你想的话，去 [client page](http://redis.io/clients) 下载相应的驱动。
+很快你就会学到，Redis 的 API 描述做得非常好，就像代码中的一组方法一样。它非常简单并易于编程。也就是说，不管你是用命令行工具，或者用你喜欢的语言，所做的事情基本类似。因此，如果你想从一个编程语言开始学习它，完全没有问题。如果你想的话，去 [client page](http://redis.io/clients) 下载相应的驱动。
 
 # 第一章 - 基础知识
 
