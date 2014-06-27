@@ -102,21 +102,21 @@ Redis 对数据库的定义和你熟知的概念是一致的。数据库中包�
 
 ## Commands, Keys and Values
 
-While Redis is more than just a key-value store, at its core, every one of Redis' five data structures has at least a key and a value. It's imperative that we understand keys and values before moving on to other available pieces of information.
+虽然 Redis 不单是一个键值对存储，但是其核心，Redis 提供的五种数据结构至少都有一个 key 和一个 value。在我们开始更深入的讨论之前，理解 key 和 value 是非常重要的。
 
-Keys are how you identify pieces of data. We'll be dealing with keys a lot, but for now, it's good enough to know that a key might look like `users:leto`. One could reasonably expect such a key to contain information about a user named `leto`. The colon doesn't have any special meaning, as far as Redis is concerned, but using a separator is a common approach people use to organize their keys.
+Key 定义了如何标识数据块。我们将会经常和 Key 打交道，但是现在，只要知道 key 看起来应该有像 `users:leto` 这样的格式就可以了。这样一个 key 一看就知道这条数据中有一个叫 `leto` 的用户的相关信息。冒号没什么意义，不过对 Redis 来说，用符号分隔 key 是一般常用方式。
 
-Values represent the actual data associated with the key. They can be anything. Sometimes you'll store strings, sometimes integers, sometimes you'll store serialized objects (in JSON, XML or some other format). For the most part, Redis treats values as a byte array and doesn't care what they are. Note that different drivers handle serialization differently (some leave it up to you) so in this book we'll only talk about string, integer and JSON.
+Values 表示 key 的实际数据。它们可以是任何东西。你可能存储字符串，整数，或者序列化对象(以 JSON, XML 或者其他什么格式)。大多数情况下，Redis 会把 value 作为字节数组对待，并不关心他们到底是什么。注意，驱动不一样处理序列化方式可能也不一样(有些会让你自己处理)，因此本书我们只讨论字符串，整数和 JSON。
 
-Let's get our hands a little dirty. Enter the following command:
+让我们开始动手试试。输入下列命令:
 
 	set users:leto '{"name": "leto", "planet": "dune", "likes": ["spice"]}'
 
-This is the basic anatomy of a Redis command. First we have the actual command, in this case `set`. Next we have its parameters. The `set` command takes two parameters: the key we are setting and the value we are setting it to. Many, but not all, commands take a key (and when they do, it's often the first parameter). Can you guess how to retrieve this value? Hopefully you said (but don't worry if you weren't sure!):
+这是一个基本的 Redis 命令。首先我们实际执行的命令，在这里是 `set`。然后是它的参数。`set` 命令有两个参数: 我们设定的 key 和为 key 设置的 value。大多数情况下，不过不是所有，命令通常都带 key 参数(存在情况下，通常会是第一个)。猜猜怎么拿到刚才的值？你肯定知道(不知道嘛也没关系!):
 
 	get users:leto
 
-Go ahead and play with some other combinations. Keys and values are fundamental concepts, and the `get` and `set` commands are the simplest way to play with them. Create more users, try different types of keys, try different values.
+继续试试其他组合。Key 和 Value 是最基本的概念，`get` 和 `set` 命令是对它们最简单的操作。创建更多的 users，尝试不同类型的 key 和不同的 value。
 
 ## Querying
 
