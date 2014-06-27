@@ -120,11 +120,11 @@ Values 表示 key 的实际数据。它们可以是任何类型。你可以存�
 
 ## Querying
 
-As we move forward, two things will become clear. As far as Redis is concerned, keys are everything and values are nothing. Or, put another way, Redis doesn't allow you to query an object's values. Given the above, we can't find the user(s) which live on planet `dune`.
+随着学习深入，有两件事变得越来越清楚。对 Redis 来说，key 是全部，而 value 无所谓。或者，换个说法，Redis 不允许你查询对象的值。举个例子，我们不可能查询那些生活在 `dune` 行星上的用户。
 
-For many, this will cause some concern. We've lived in a world where data querying is so flexible and powerful that Redis' approach seems primitive and unpragmatic. Don't let it unsettle you too much. Remember, Redis isn't a one-size-fits-all solution. There'll be things that just don't belong in there (because of the querying limitations). Also, consider that in some cases you'll find new ways to model your data.
+对一些人来说，这可能会造成些许困惑。我们的世界中，数据查询是那么灵活那么强大，可是 Redis 的做法看起来太原始太不务实了。不要被这种旧观念困扰你太久。记住，Redis 不是一揽子解决案。有些东西并不属于这里(由于查询的限制)。这样，在这种观念的引导下，在面临某些问题时，你会找到新的建模方案。
 
-We'll look at more concrete examples as we move on, but it's important that we understand this basic reality of Redis. It helps us understand why values can be anything - Redis never needs to read or understand them. Also, it helps us get our minds thinking about modeling in this new world.
+我们之后会看到更多的具体例子，不过重点在于我们应该理解 Redis 的这些基本事实。这有助于我们明白为什么 value 可以是任何类型 -  Redis 根本不需要去读取或者理解他们。同样，这会帮助我们用新思维在这新世界考虑新的建模方案。
 
 ## Memory and Persistence
 
