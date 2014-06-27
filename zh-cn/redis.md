@@ -43,42 +43,42 @@ Karl 在 [the-little-redis-book](https://github.com/karlseguin/the-little-redis-
 
 大家的学习方式不一样: 有些人喜欢动手实践，有些人喜欢看视频，还有些喜欢读文章。但是要理解 Redis ，没有什么会比动手实践更有效了。Redis 非常容易安装，还有一个简单的 shell，我们可以在上面实现一切。让我们花几分钟在你机器上安装并运行起来。
 
-## On Windows
+## Windows 环境
 
-Redis itself doesn't officially support Windows, but there are options available. You wouldn't run these in production, but I've never experienced any limitations while doing development.
+Redis 本身并不正式支持 Windows ，但也有可用选项。你不会把这些用到生产环境上的，但用在开发环境上，我没遇到过任何限制。
 
-A port by Microsoft Open Technologies, Inc. can be found at <https://github.com/MSOpenTech/redis>. As of this writing the solution is not ready for use in production systems.
+其中一个来自 Microsoft Open Technologies, Inc. 的副本在这里 <https://github.com/MSOpenTech/redis>。同样,该解决案并不是为了生产环境准备的。
 
-Another solution, which has been available for some time, can be found at <https://github.com/dmajkic/redis/downloads>. You can download the most up to date version (which should be at the top of the list). Extract the zip file and, based on your architecture, open either the `64bit` or `32bit` folder.
+另外一个方案，已经有一段时间了，在<https://github.com/dmajkic/redis/downloads>。你可以下载最新版本(应该是列表中最上面一个)。解压 zip 文件，根据你的环境架构，选择使用 `64bit` 或 `32bit` 
 
-## On *nix and MacOSX
+## *nix 和 MacOSX 环境
 
-For *nix and Mac users, building it from source is your best option. The instructions, along with the latest version number, are available at <http://redis.io/download>. At the time of this writing the latest version is 2.6.2; to install this version we would execute:
+对于 *nix 和 Mac 用户，users, 从源码编译应该是你最好的选择。该版本，最新可用版本，在这里下载 <http://redis.io/download>。 编写本书时，最新版本是 2.6.2；用以下命令安装该版本:
 
 	wget http://redis.googlecode.com/files/redis-2.6.2.tar.gz
 	tar xzf redis-2.6.2.tar.gz
 	cd redis-2.6.2
 	make
 
-(Alternatively, Redis is available via various package managers. For example, MacOSX users with Homebrew installed can simply type `brew install redis`.)
+(当然，Redis 也可以通过各种包管理工具安装。比如说，MacOSX 用户通过 Homebrew 安装只需要简单输入 `brew install redis`即可。)
 
-If you built it from source, the binary outputs have been placed in the `src` directory. Navigate to the `src` directory by executing `cd src`.
+如果你从源码编译，二进制文件被放在 `src` 文件夹下。进入 `src` 文件夹，通过 `cd src`。
 
-## Running and Connecting to Redis
+## 运行和链接 Redis
 
-If everything worked, the Redis binaries should be available at your fingertips. Redis has a handful of executables. We'll focus on the Redis server and the Redis command line interface (a DOS-like client). Let's start the server. In Windows, double click `redis-server`. On *nix/MacOSX run `./redis-server`.
+如果一切正常，一份可用的 Redis 二进制文件将在你手中诞生。Redis 有一套可执行文件。我们主要使用 Redis 服务和 Redis 命令行界面 (Redis-cli，一个类 DOS 客户端)。让我们启动服务。在 Window 上，双击 `redis-server`。在 *nix/MacOSX 上，执行 `./redis-server`。
 
-If you read the start up message you'll see a warning that the `redis.conf` file couldn't be found. Redis will instead use built-in defaults, which is fine for what we'll be doing.
+如果你读一下启动信息，你会看到有个警告是关于 `redis.conf` 文件找不到的。Redis 会转而使用内建的默认项，这对我们接下来的学习毫无影响。
 
-Next start the Redis console by either double clicking `redis-cli` (Windows) or running `./redis-cli` (*nix/MacOSX). This will connect to the locally-running server on the default port (6379).
+下一步，打开 Rdis 控制台，双击 `redis-cli` (Windows) 或者执行 `./redis-cli` (*nix/MacOSX)。它将会链接到本地运行的默认服务端口上 (6379)。
 
-You can test that everything is working by entering `info` into the command line interface. You'll hopefully see a bunch of key-value pairs which provide a great deal of insight into the server's status.
+你可以测试一下是否所有运转正常，在命令行界面输入 `info` 。你应该会看到一大堆的键值对，它提供了大量的关于服务状态的信息。
 
-If you are having problems with the above setup I suggest you seek help in the [official Redis support group](https://groups.google.com/forum/#!forum/redis-db).
+如果你的安装有问题，我建议你到[official Redis support group](https://groups.google.com/forum/#!forum/redis-db)去寻求帮助。
 
-# Redis Drivers
+# Redis 驱动
 
-As you'll soon learn, Redis' API is best described as an explicit set of functions. It has a very simple and procedural feel to it. This means that whether you are using the command line tool, or a driver for your favorite language, things are very similar. Therefore, you shouldn't have any problems following along if you prefer to work from a programming language. If you want, head over to the [client page](http://redis.io/clients) and download the appropriate driver.
+很快你就会看到，Redis 的 API 描述做得非常好，就像代码中的一组方法一样。它非常简单并易于编程。也就是说，不管你是用命令行工具，或者用你喜欢的语言，所做的事情基本类似。因此，如果你想从一个编程语言开始学习它，完全没有问题。如果你想的话，去 [client page](http://redis.io/clients) 下载相应的驱动。
 
 # 第一章 - 基础知识
 
