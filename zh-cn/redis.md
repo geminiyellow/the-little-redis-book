@@ -120,7 +120,7 @@ Values 表示 key 的实际数据。它们可以是任何类型。你可以存�
 
 ## Querying
 
-随着学习深入，有两件事变得越来越清楚。对 Redis 来说，key 是全部，而 value 无所谓。或者，换个说法，Redis 不允许你查询对象的值。举个例子，我们不可能查询那些生活在 `dune` 行星上的用户。
+随着学习深入，有两件事变得越来越清楚。对 Redis 来说，key 是全部，而 value 无所谓。或者，换个说法，Redis 不允许你查询对象的值。上面的例子中，我们不可能查询那些生活在 `dune` 行星上的用户。
 
 对一些人来说，这可能会造成些许困惑。我们的世界中，数据查询是那么灵活那么强大，可是 Redis 的做法看起来太原始太不务实了。不要被这种旧观念困扰你太久。记住，Redis 不是一揽子解决案。有些东西并不属于这里(由于查询的限制)。这样，在这种观念的引导下，在面临某些问题时，你会找到新的建模方案。
 
@@ -128,33 +128,33 @@ Values 表示 key 的实际数据。它们可以是任何类型。你可以存�
 
 ## Memory and Persistence
 
-We mentioned before that Redis is an in-memory persistent store. With respect to persistence, by default, Redis snapshots the database to disk based on how many keys have changed. You configure it so that if X number of keys change, then save the database every Y seconds. By default, Redis will save the database every 60 seconds if 1000 or more keys have changed all the way to 15 minutes if 9 or less keys has changed.
+之前我们提到过，Redis 是一个基于内存的持久化存储。对于持久化，默认情况下，Redis 基于一定量 key 的变更，来触发对数据库进行快照，保存到硬盘上。你可以配置它，比如每 Y 秒钟内，如果有 X 个 key 改变了，那么将数据保存下来。默认情况下，Redis 会在每 60 秒，如果有 1000 及以上个 key 发生改变，将对数据快照保存。或每15分钟，即使少于9个 key 发生改变，也会把数据快照保存。
 
-Alternatively (or in addition to snapshotting), Redis can run in append mode. Any time a key changes, an append-only file is updated on disk. In some cases it's acceptable to lose 60 seconds worth of data, in exchange for performance, should there be some hardware or software failure. In some cases such a loss is not acceptable. Redis gives you the option. In chapter 6 we'll see a third option, which is offloading persistence to a slave.
+另外(或者和快照一起)，Redis 支持增量模式。一旦 key 发生变化，一个增量包会更新到硬盘上。某些情况下，允许数据60秒的更新延迟，用以换取性能上的提升，是值得的，虽然有可能会发生硬件或软件异常，导致数据丢失。在某些情况下确难以接受。Redis 还有一种可选方案，我们将会在第六章看到第三种选择，将持久化任务分流到从服务器上。
 
-With respect to memory, Redis keeps all your data in memory. The obvious implication of this is the cost of running Redis: RAM is still the most expensive part of server hardware.
+至于内存，Redis 把所有的数据都保存在内存中。这说明了使用 Redis 的成本并不低: RAM 仍然还是服务器硬件中最贵的部分。
 
-I do feel that some developers have lost touch with how little space data can take. The Complete Works of William Shakespeare takes roughly 5.5MB of storage. As for scaling, other solutions tend to be IO- or CPU-bound. Which limitation (RAM or IO) will require you to scale out to more machines really depends on the type of data and how you are storing and querying it. Unless you're storing large multimedia files in Redis, the in-memory aspect is probably a non-issue. For apps where it is an issue you'll likely be trading being IO-bound for being memory bound.
+我觉得应该有些开发者对数据会占用多少空间没什么概念。莎士比亚全集大概需要 5.5MB 的存储空间。至于扩展，其他方案倾向于 IO-绑定 或者 CPU-绑定。这些限制(RAM 或 IO)根据数据类型和你如何去排序和查询，会要求你把数据扩展切分到更多的机器上。除非你保存巨大的媒体文件到 Redis 中，否则基于内存的存储应该没有什么问题。而对 App 来说，it is an issue you'll likely be trading being IO-bound for being memory bound.
 
-Redis did add support for virtual memory. However, this feature has been seen as a failure (by Redis' own developers) and its use has been deprecated.
+Redis 还支持虚拟内存。但是，这个功能貌似是失败了(Redis 开发者自己说的)，并且它的使用以及被声明过期。
 
-(On a side note, that 5.5MB file of Shakespeare's complete works can be compressed down to roughly 2MB. Redis doesn't do auto-compression but, since it treats values as bytes, there's no reason you can't trade processing time for RAM by compressing/decompressing the data yourself.)
+(另一角度看，5.5MB 大小的莎士比亚全集可以压缩到 2MB。可是 Redis 不会自动执行压缩，因为它是把 value 作为字节数组来处理，没什么理由不让你通过压缩/解压数据来换取 RAM 。)
 
 ## Putting It Together
 
-We've touched on a number of high level topics. The last thing I want to do before diving into Redis is bring some of those topics together. Specifically, query limitations, data structures and Redis' way to store data in memory.
+我们谈到了许多高层面的话题。在深入 Redis 之前，我想做的最后一件事情是把这些话题整合起来。具体来说，包括查询限制，数据结构和 Redis 用内存保存数据的方式。
 
-When you add those three things together you end up with something wonderful: speed. Some people think "Of course Redis is fast, everything's in memory." But that's only part of it. The real reason Redis shines versus other solutions is its specialized data structures.
+当你把三件事情整合起来的时候，你得到一个很棒的结果:速度。有些人会这样认为，"Redis 当然会快啊，把所有的东西都放在内存了。" 不过这仅仅是一方面。Redis 与其他解决案相比的闪光点在于它特别的数据结构。
 
-How fast? It depends on a lot of things - which commands you are using, the type of data, and so on. But Redis' performance tends to be measured in tens of thousands, or hundreds of thousands of operations **per second**. You can run `redis-benchmark` (which is in the same folder as the `redis-server` and `redis-cli`) to test it out yourself.
+有多快？这取决于多方面 - 你用的是哪个命令，数据的类型，等等。不过测量 Redis 的性能通常可以用**每秒**执行多少万，或者多少十万次为单位来表示。你可以自己试着执行 `redis-benchmark` (和 `redis-server` 及 `redis-cli` 在同一文件夹下) 来测试它。
 
-I once changed code which used a traditional model to using Redis. A load test I wrote took over 5 minutes to finish using the relational model. It took about 150ms to complete in Redis. You won't always get that sort of massive gain, but it hopefully gives you an idea of what we are talking about.
+我曾经尝试过把一组使用传统建模的代码转换到 Redis 上。一个负载测试，在关系模型中它花了五分钟跑完。而在 Redis 中，它只用了大概 150ms。当然你不能期望所有的转换都能得到那么大的收益，但是我希望这能给你一个概念，我们说的速度的改变是什么。
 
-It's important to understand this aspect of Redis because it impacts how you interact with it. Developers with an SQL background often work at minimizing the number of round trips they make to the database. That's good advice for any system, including Redis. However, given that we are dealing with simpler data structures, we'll sometimes need to hit the Redis server multiple times to achieve our goal. Such data access patterns can feel unnatural at first, but in reality it tends to be an insignificant cost compared to the raw performance we gain.
+理解 Redis 的这个特性非常重要，因为它会影响你怎么和它进行交互。有 SQL 背景的开发者通常会最小化跟数据库之间的来回交互次数。这对所有的系统都是一个好习惯，包括 Redis。 但是，为了由于我们简单的数据结构，有时候我们需要多次查询 Redis 服务，以达成我们的需求目标。这种数据访问方式，刚开始的时候可能会觉得不太自然，但是对于我们所能获取的性能来说，其损失真的是微不足道。
 
 ## 小结
 
-虽然我们几乎把 Redis 全身上下都玩了一遍，展开了很宽泛的讨论。不过别担心，弄不清楚也不要紧 - 比如说查询。在下一章我们将动手做，实践找出那些你想得到答案的所有问题。
+虽然我们几乎把 Redis 特性都介绍一遍，展开了很宽泛的讨论。不过别担心，弄不清楚也不要紧 - 比如说查询。在下一章我们将动手做，实践找出那些你想得到答案的所有问题。
 
 这章中我们应该明白的几个点:
 
