@@ -168,13 +168,13 @@ Redis 还支持虚拟内存。但是，这个功能貌似是失败了(Redis 开�
 
 # 第二章 - 数据结构
 
-It's time to look at Redis' five data structures. We'll explain what each data structure is, what methods are available and what type of feature/data you'd use it for.
+现在是时候开始学习 Redis 的五种数据结构了。我们将会解释每种数据结构到底是什么，提供了什么方法，以及它们适用于何种类型的功能/数据。
 
-The only Redis constructs we've seen so far are commands, keys and values. So far, nothing about data structures has been concrete. When we used the `set` command, how did Redis know what data structure to use? It turns out that every command is specific to a data structure. For example when you use `set` you are storing the value in a string data structure. When you use `hset` you are storing it in a hash. Given the small size of Redis' vocabulary, it's quite manageable.
+到目前为止，我们理解的 Redis 结构包括命令，key 和 value。关于数据结构我们并没有涉及。在我们使用 `set` 的时候，Redis 是怎么知道用了何种数据结构的？实际上所有的命令都对应到了具体的数据结构上。比如说当你用 `set` 你会把 value 储存为字符串数据结构。当你用 `hset` 你会把它储存为一个哈希。由于 Redis 的关键字集很小，所以这是完全可以掌握的。
 
-**[Redis' website](http://redis.io/commands) has great reference documentation. There's no point in repeating the work they've already done. We'll only cover the most important commands needed to understand the purpose of a data structure.**
+**[Redis' website](http://redis.io/commands) 的引用文档非常好。在这里没有必要再重复一次他们已经完成的工作。我们只介绍那些在理解数据结构时必须的最重要的命令。**
 
-There's nothing more important than having fun and trying things out. You can always erase all the values in your database by entering `flushdb`, so don't be shy and try doing crazy things!
+这里没有比实践更有意思更重要了。你可以通过 `flushdb` 把数据库中的数据全部擦除，所以，别害羞我的小女孩，摇起来吧！
 
 ## Strings
 
