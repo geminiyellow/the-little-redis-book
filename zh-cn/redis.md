@@ -178,9 +178,9 @@ Redis 还支持虚拟内存。但是，这个功能貌似是失败了(Redis 开�
 
 ## Strings
 
-Strings are the most basic data structures available in Redis. When you think of a key-value pair, you are thinking of strings. Don't get mixed up by the name, as always, your value can be anything. I prefer to call them "scalars", but maybe that's just me.
+字符串是 Redis 中最基本的数据结构。当你说键值对的时候，你肯定想到的是字符串。不要被名字迷惑，如前述，你的 value 可以是任何东西。我宁愿把它们叫做标量(Scalars)，不过大概只有我才这样。
 
-We already saw a common use-case for strings, storing instances of objects by key. This is something that you'll make heavy use of:
+我们已经看过一个用字符串的一般用例了，通过 key 保存对象实例。我们以后会经常用到类似这样的用法:
 
 	set users:leto '{"name": leto, "planet": dune, "likes": ["spice"]}'
 
