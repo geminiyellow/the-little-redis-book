@@ -82,23 +82,23 @@ Redis 本身并不正式支持 Windows ，但也有可用选项。你当然是�
 
 # 第一章 - 基础知识
 
-What makes Redis special? What types of problems does it solve? What should developers watch out for when using it? Before we can answer any of these questions, we need to understand what Redis is.
+Redis 有什么特别之处？它主要用来解决什么类型的问题？在使用过程中，开发者应该注意什么问题？在我们开始回答这些问题之前，首先让我们来了解一下，Redis 是什么。
 
-Redis is often described as an in-memory persistent key-value store. I don't think that's an accurate description. Redis does hold all the data in memory (more on this in a bit), and it does write that out to disk for persistence, but it's much more than a simple key-value store. It's important to step beyond this misconception otherwise your perspective of Redis and the problems it solves will be too narrow.
+Redis 通常被描述为一个基于内存的，可持久化的，键值对方式的存储。我觉得这个描述不太准确。Redis 确实把所有的数据都放到内存中(稍后详述)，并且它确实可以把数据写到硬盘上用以持久化，但是它不单单是一个简单的键值对存储。纠正这种误解是非常重要的，否则你对 Redis 的看法，以及对它所能解决问题的能力的理解就会变得狭隘起来。
 
-The reality is that Redis exposes five different data structures, only one of which is a typical key-value structure. Understanding these five data structures, how they work, what methods they expose and what you can model with them is the key to understanding Redis. First though, let's wrap our heads around what it means to expose data structures.
+实际上，在 Redis 提供的五种不同的数据结构中，只有一种是典型的键值对结构。深刻理解这五种数据结构，它们的工作原理，它们提供的方法，以及怎样用这些数据结构去建模，是学习理解 Redis 的关键。 首先，让我们来弄明白，这些数据结构的具体含义。
 
-If we were to apply this data structure concept to the relational world, we could say that databases expose a single data structure - tables. Tables are both complex and flexible. There isn't much you can't model, store or manipulate with tables. However, their generic nature isn't without drawbacks. Specifically, not everything is as simple, or as fast, as it ought to be. What if, rather than having a one-size-fits-all structure, we used more specialized structures? There might be some things we can't do (or at least, can't do very well), but surely we'd gain in simplicity and speed?
+如果我们把数据结构这个概念放到关系型数据库世界的话，那么我们可以说，关系型数据库提供了唯一一种数据结构 - 表。表又复杂又灵活。基本没有什么问题是表不能处理的，包括建模，存储或者是管理数据。然而，这种通用性也不是没有缺点。比如说，并不是所有东西都是那么简单，不是那么快捷，看起来像它应有的样子一样。就算可以，我们也不会用一个大而全的结构，我们不是通常会用更小更专的结构吗？确实有些东西我们做不了(或者说，做得不好)，但是可以肯定的是这样做我们可以得到简单和快速对吧？
 
-Using specific data structures for specific problems? Isn't that how we code? You don't use a hashtable for every piece of data, nor do you use a scalar variable. To me, that defines Redis' approach. If you are dealing with scalars, lists, hashes, or sets, why not store them as scalars, lists, hashes and sets? Why should checking for the existence of a value be any more complex than calling `exists(key)` or slower than O(1) (constant time lookup which won't slow down regardless of how many items there are)?
+具体问题具体分析？我们不就是这样写代码的吗？你当然不会对数据都套一个哈希表，也不会用一个 scalar 变量。对我来说，这正是 Redis 的做法。如果你要处理 scalars, lists, hashes, 或者 sets, 为什么不把他们直接存为 scalars, lists, hashes 和 sets？为什么仅仅是为了确认存在值，要去调用比 `exists(key)` 更复杂的方式或者要用比 O(1) (不管数据量有多少，查询的时间都是固定不变的)更慢的方式？
 
 # The Building Blocks
 
 ## Databases
 
-Redis has the same basic concept of a database that you are already familiar with. A database contains a set of data. The typical use-case for a database is to group all of an application's data together and to keep it separate from another application's.
+Redis 对数据库的定义和你熟知的概念是一致的。数据库中包含一组数据。典型的数据库用例是，把所有应用的数据都集中起来，但是以应用为单位把数据分隔保存。
 
-In Redis, databases are simply identified by a number with the default database being number `0`. If you want to change to a different database you can do so via the `select` command. In the command line interface, type `select 1`. Redis should reply with an `OK` message and your prompt should change to something like `redis 127.0.0.1:6379[1]>`. If you want to switch back to the default database, just enter `select 0` in the command line interface.
+在 Redis 中，数据库定位非常简单，通过一个标识数字，默认开始标识是 `0`。如果你想切换到不同的数据库，你可以通过使用 `select` 命令。在命令行界面，输入 `select 1`。Redis 会响应一个 `OK` 信息然后你的提示符应该会变成类似 `redis 127.0.0.1:6379[1]>` 这样。如果你想切回默认数据库，只要在命令行界面输入 `select 0` 就可以了。
 
 ## Commands, Keys and Values
 
