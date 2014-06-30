@@ -236,21 +236,21 @@ Redis 还支持虚拟内存。但是，这个功能貌似是失败了(Redis 开�
 
 ## Lists
 
-Lists let you store and manipulate an array of values for a given key. You can add values to the list, get the first or last value and manipulate values at a given index. Lists maintain their order and have efficient index-based operations. We could have a `newusers` list which tracks the newest registered users to our site:
+列表结构可以让你，为指定的 key 以数组形式作为 value 来保存和处理。你可以向数组插入值，获取第一个或者最后一个值，以及操作指定索引位置上的值。列表结构会维护这些值的排序，并且有基于索引的高效操作。比如我们可以创建一个 `newusers` 列表用来跟踪我们网站最新的注册用户:
 
 	lpush newusers goku
 	ltrim newusers 0 49
 
-First we push a new user at the front of the list, then we trim it so that it only contains the last 50 users. This is a common pattern. `ltrim` is an O(N) operation, where N is the number of values we are removing. In this case, where we always trim after a single insert, it'll actually have a constant performance of O(1) (because N will always be equal to 1).
+首先我们 push 一个新用户到列表的最前面，然后我们再 trim 它，这样就只保持了最新的 50 个用户了。这是一个常见的模式。 `ltrim` 是一个 O(N) 操作，其中 N 是我们删除数据的数量。这个例子中，我们总是在一个单项插入之后做 trim ,所以它实际上会有一个恒定的 O(1) 性能(因为 N 总是等于 1)。
 
-This is also the first time that we are seeing a value in one key referencing a value in another. If we wanted to get the details of the last 10 users, we'd do the following combination:
+而下面这个例子，我们将第一次接触到，把 key 作为查询结果得到之后，再用于查询 value 的例子。比如我们想拿到最后 10 位用户的详细信息，我们可以这样操作:
 
 	ids = redis.lrange('newusers', 0, 9)
 	redis.mget(*ids.map {|u| "users:#{u}"})
 
-The above is a bit of Ruby which shows the type of multiple roundtrips we talked about before.
+上面这个 Ruby 的小例子演示了我们之前说过的多次查询操作。
 
-Of course, lists aren't only good for storing references to other keys. The values can be anything. You could use lists to store logs or track the path a user is taking through a site. If you were building a game, you might use one to track queued user actions.
+当然，列表结构的好处不单单是用来保存另外的 key 引用。value 可以是任何东西。你可以用列表结构来存储日志或者跟踪用户访问网站的路径足迹。如果你用来做游戏，你可以拿来记录玩家的动作队列。
 
 ## Sets
 
