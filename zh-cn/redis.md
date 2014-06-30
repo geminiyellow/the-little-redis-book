@@ -276,23 +276,23 @@ Redis 还支持虚拟内存。但是，这个功能貌似是失败了(Redis 开�
 
 ## Sorted Sets
 
-The last and most powerful data structure are sorted sets. If hashes are like strings but with fields, then sorted sets are like sets but with a score. The score provides sorting and ranking capabilities. If we wanted a ranked list of friends, we might do:
+最后一个也是最强力的一个数据结构是有序集合结构.如果说哈希结构看起来像字符串结构，但是有字段，那么有序集合结构就像集合结构一样，但是有权重(score)。权重提供了排序和排名功能。如果我们想看朋友排名，我们可以这样:
 
 	zadd friends:duncan 70 ghanima 95 paul 95 chani 75 jessica 1 vladimir
 
-Want to find out how many friends `duncan` has with a score of 90 or over?
+想找出 `duncan` 有多少朋友的权重是在 90 及以上的？
 
 	zcount friends:duncan 90 100
 
-How about figuring out `chani`'s rank?
+那怎么找出 `chani` 的排名呢？
 
 	zrevrank friends:duncan chani
 
-We use `zrevrank` instead of `zrank` since Redis' default sort is from low to high (but in this case we are ranking from high to low). The most obvious use-case for sorted sets is a leaderboard system. In reality though, anything you want sorted by some integer, and be able to efficiently manipulate based on that score, might be a good fit for a sorted set.
+我们用 `zrevrank` 来代替 `zrank` 是因为 Redis 默认排序是从低到高的(但这里我们需要从高到低排序)。有序集合最常见的用例就是排行榜系统了。事实上，任何你想用整数来排序的东西，以及那些用权重可以很好的处理的操作，都适用于有序集。
 
 ## 小结
 
-本章从高层次来讲解了 Redis 的五种数据结构。使用 Redis 有一个很棒的特点就是，你能做的通常比你开始所认为的要来得多。对于 string 和 sorted sets ，肯定还有许多未被发现的用法。当你理解了正常的用例之后，你会发现 Redis 处理所有类型的问题都得心应手。还有，虽然 Redis 只提供了五种数据结构，以及相应的方法，但是不要觉得你需要把它们全用上。很少在建立一个功能的时候会这样做，只有某些很难的命令的时候才会考虑。
+本章从概要层面来讲解了 Redis 的五种数据结构。使用 Redis 有一个很棒的特点就是，你能做的通常比你开始所认为的要来得多。对于 string 和 sorted sets ，肯定还有许多未被发现的用法。当你理解了正常的用例之后，你会发现 Redis 处理所有类型的问题都得心应手。还有，虽然 Redis 只提供了五种数据结构，以及相应的方法，但是不要觉得你需要把它们全用上。很少在建立一个功能的时候会这样做，只有某些很难的命令的时候才会考虑。
 
 # 第三章 - 数据结构用例
 
