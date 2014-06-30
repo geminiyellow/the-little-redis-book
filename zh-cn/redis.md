@@ -178,13 +178,13 @@ Redis 还支持虚拟内存。但是，这个功能貌似是失败了(Redis 开�
 
 ## Strings
 
-字符串是 Redis 中最基本的数据结构。当你说键值对的时候，你肯定想到的是字符串。不要被名字迷惑，如前述，你的 value 可以是任何东西。我宁愿把它们叫做标量(Scalars)，不过大概只有我才这样。
+字符串是 Redis 中最基本的数据结构。当你说键值对的时候，你肯定想到的是字符串。不要被名字迷惑，如前述，你的 value 可以是任何东西。我宁愿把它叫标量(Scalars)，不过大概只有我才这样。
 
 我们已经看过一个用字符串的一般用例了，通过 key 保存对象实例。我们以后会经常用到类似这样的用法:
 
 	set users:leto '{"name": leto, "planet": dune, "likes": ["spice"]}'
 
-Additionally, Redis lets you do some common operations. For example `strlen <key>` can be used to get the length of a key's value; `getrange <key> <start> <end>` returns the specified range of a value; `append <key> <value>` appends the value to the existing value (or creates it if it doesn't exist already). Go ahead and try those out. This is what I get:
+另外， Redis 还有一些字符串通用操作。比如 `strlen <key>` 可以用来获取 key 的对应 value 的长度; `getrange <key> <start> <end>` 返回 key 的 value 的指定范围的值; `append <key> <value>` 追加值到当前值上 (或者不存在的时候生成)。动手试试看，下面是我得到的结果:
 
 	> strlen users:leto
 	(integer) 50
@@ -195,9 +195,9 @@ Additionally, Redis lets you do some common operations. For example `strlen <key
 	> append users:leto " OVER 9000!!"
 	(integer) 62
 
-Now, you might be thinking, that's great, but it doesn't make sense. You can't meaningfully pull a range out of JSON or append a value. You are right, the lesson here is that some of the commands, especially with the string data structure, only make sense given specific type of data.
+现在，你肯定会觉得，说得好，但这毫无意义。光从 JSON 中抽出一段范围或者追加一个值完全没有意义。你说得对，这里的意思是，一些命令，特别是对于字符串类型数据结构，只有在指定类型的数据中才有意义。
 
-Earlier we learnt that Redis doesn't care about your values. Most of the time that's true. However, a few string commands are specific to some types or structure of values. As a vague example, I could see the above `append` and `getrange` commands being useful in some custom space-efficient serialization. As a more concrete example I give you the `incr`, `incrby`, `decr` and `decrby` commands. These increment or decrement the value of a string:
+原先我们讲过，Redis 不关心你的值是什么。多数情况下这是对的。但是，一小部分字符串命令对于某些类型或结构的值非常有用。比如说，我们可以上面的 `append` 和 `getrange` 命令，在处理一些 custom space-efficient serialization 的时候非常有用。一个更具体的例子，你可是试试看 `incr`, `incrby`, `decr` 和 `decrby` 命令。下面字符串的值进行增减操作:
 
 	> incr stats:page:about
 	(integer) 1
@@ -209,11 +209,11 @@ Earlier we learnt that Redis doesn't care about your values. Most of the time th
 	> incrby ratings:video:12333 3
 	(integer) 8
 
-As you can imagine, Redis strings are great for analytics. Try incrementing `users:leto` (a non-integer value) and see what happens (you should get an error).
+如你所想，Redis 的字符串结构对于分析操作非常有效。试试看 `users:leto` (非整形值) 会怎样 (你会拿到个异常)。
 
-A more advanced example is the `setbit` and `getbit` commands. There's a [wonderful post](http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/) on how Spool uses these two commands to efficiently answer the question "how many unique visitors did we have today". For 128 million users a laptop generates the answer in less than 50ms and takes only 16MB of memory.
+再来一个更高级的例子，`setbit` 和 `getbit` 命令。这有篇 [wonderful post](http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/)，关于 [Spool](http://blog.getspool.com) 如何结合使用这两个命令，来高效的回答 "今天有多少独立用户访问了我" 这个问题的。一亿两千八百万用户，在笔记本上测试，50ms 内做出了回答，而且只占用了16MB的内存。
 
-It isn't important that you understand how bitmaps work, or how Spool uses them, but rather to understand that Redis strings are more powerful than they initially seem. Still, the most common cases are the ones we gave above: storing objects (complex or not) and counters. Also, since getting a value by key is so fast, strings are often used to cache data.
+你不明白 bitmap 的工作原理没关系，不知道 Spool 怎么用这两个命令也没关系，只想让你明白 Redis 字符串操作比看起来要强大得多得多。好了话说回来，最常用的场景是我们上面给出的场景:排序(不管简单复杂)和计数。还有，因为根据 key 拿 value 超快，所以字符串结构也通常用于缓存数据。
 
 ## Hashes
 
