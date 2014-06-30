@@ -217,12 +217,12 @@ Redis 还支持虚拟内存。但是，这个功能貌似是失败了(Redis 开�
 
 ## Hashes
 
-Hashes are a good example of why calling Redis a key-value store isn't quite accurate. You see, in a lot of ways, hashes are like strings. The important difference is that they provide an extra level of indirection: a field. Therefore, the hash equivalents of `set` and `get` are:
+哈希结构是一个很好的例子，说明了为什么说 Redis 是个单纯的键值对存储是不对的。你看，在多数情况下，哈希结构看起来就跟字符串结构一样。但最大的不同是，它们还有另外一层中间层: 字段。所以，哈希的 `set` 和 `get` 是这样的:
 
 	hset users:goku powerlevel 9000
 	hget users:goku powerlevel
 
-We can also set multiple fields at once, get multiple fields at once, get all fields and values, list all the fields or delete a specific field:
+我们可以一次设定多个字段，一次获取多个字段，获取所有的字段和值，列出所有的字段清单或者删除指定字段:
 
 	hmset users:goku race saiyan age 737
 	hmget users:goku race powerlevel
@@ -230,9 +230,9 @@ We can also set multiple fields at once, get multiple fields at once, get all fi
 	hkeys users:goku
 	hdel users:goku age
 
-As you can see, hashes give us a bit more control over plain strings. Rather than storing a user as a single serialized value, we could use a hash to get a more accurate representation. The benefit would be the ability to pull and update/delete specific pieces of data, without having to get or write the entire value.
+如你所见，相比纯字符串结构，哈希结构给了我们更多的控制权限。相比把用户单纯保存为一个序列化之后的字符串，我们可以用一个哈希做更精确的描述。好处就是你可以拉取和更新/删除指定的数据片段，而不用获取或者重写整个值。
 
-Looking at hashes from the perspective of a well-defined object, such as a user, is key to understanding how they work. And it's true that, for performance reasons, more granular control might be useful. However, in the next chapter we'll look at how hashes can be used to organize your data and make querying more practical. In my opinion, this is where hashes really shine.
+从优化定义对象的角度出发学习哈希，比如说定义一个用户，是学习理解它的工作原理的关键。而且确实，从性能方面来看，更细颗粒的操作是必须的。那么，在下一章，我们将看看怎样用哈希结构组织数据结构以及怎样用它来优化查询。在我看来，这是哈希结构真正厉害的地方。
 
 ## Lists
 
