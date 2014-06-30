@@ -348,41 +348,41 @@ Logarithmic, 或者说 O(log(N)), 应该是第二快的，因为它需要扫描�
 
 ## References and Indexes
 
-We've seen a couple examples of having one value reference another. We saw it when we looked at our list example, and we saw it in the section above when using hashes to make querying a little easier. What this comes down to is essentially having to manually manage your indexes and references between values. Being honest, I think we can say that's a bit of a downer, especially when you consider having to manage/update/delete these references manually. There is no magic solution to solving this problem in Redis.
+我们已经看了好多个例子，关于怎样用一个 value 引用另一个的了。我们在我们的列表结构的例子中看到过，在上一节的用哈希结构优化查询的例子中也看到过。总结一下就是，必须手工维护你的 value 之间的索引和引用。老实说，我觉得这真的好不爽，特别是当你想到要手工去维护/更新/删除这些引用的时候。不过在 Redis 中确实没什么好办法。
 
-We already saw how sets are often used to implement this type of manual index:
+我们已经看过集合通常是怎样用来实现这种类型的手工索引了:
 
 	sadd friends:leto ghanima paul chani jessica
 
-Each member of this set is a reference to a Redis string value containing details on the actual user. What if `chani` changes her name, or deletes her account? Maybe it would make sense to also track the inverse relationships:
+该集合的每个成员都指向一条保存有实际用户信息的 Redis 字符串。如果 `chani` 改名了怎么办，或者删掉她的账号了怎么办？也许应该再跟踪一下反向关系:
 
 	sadd friends_of:chani leto paul
 
-Maintenance cost aside, if you are anything like me, you might cringe at the processing and memory cost of having these extra indexed values. In the next section we'll talk about ways to reduce the performance cost of having to do extra round trips (we briefly talked about it in the first chapter).
+维护另说，如果你像我这样做，肯定会被这些额外的索引值的处理和内存开销给吓到。在下一章，我们将会谈谈通过使用额外的查询次数降低性能开销(我们在第一章中已经简单的提到过了)。
 
-If you actually think about it though, relational databases have the same overhead. Indexes take memory, must be scanned or ideally seeked and then the corresponding records must be looked up. The overhead is neatly abstracted away (and they  do a lot of optimizations in terms of the processing to make it very efficient).
+如果你仔细想一下，其实关系型数据库也有一样的开销。索引会占用内存，必须扫描或者定位，然后找到需要的记录。开销被抽象得很好(他们为此作了许多优化，而且运作的非常好)。
 
-Again, having to manually deal with references in Redis is unfortunate. But any initial concerns you have about the performance or memory implications of this should be tested. I think you'll find it a non-issue.
+再次，在 Redis 中手工管理引用确实不幸。但是对于你所担心的性能和内存的问题，都应该先测试一下。我想你会发现其实它不是问题。
 
 ## Round Trips and Pipelining
 
-We already mentioned that making frequent trips to the server is a common pattern in Redis. Since it is something you'll do often, it's worth taking a closer look at what features we can leverage to get the most out of it.
+我们已经提到过，在 Redis 中，频繁访问服务器端是很常见的模式。因为有些东西你会需要不停的使用，值得我们去仔细看一下我们能从哪些特性中获取更多收益。
 
-First, many commands either accept one or more set of parameters or have a sister-command which takes multiple parameters. We saw `mget` earlier, which takes multiple keys and returns the values:
+首先，许多命令都可以接收一个或者多个参数，或者有一个带有多个参数的子查询。我们早些时候看到的 `mget` ，带有多个 key 和可以返回多个 value:
 
 	ids = redis.lrange('newusers', 0, 9)
 	redis.mget(*ids.map {|u| "users:#{u}"})
 
-Or the `sadd` command which adds 1 or more members to a set:
+或者 `sadd` 命令向集合中添加一个或多个记录:
 
 	sadd friends:vladimir piter
 	sadd friends:paul jessica leto "leto II" chani
 
-Redis also supports pipelining. Normally when a client sends a request to Redis it waits for the reply before sending the next request. With pipelining you can send a number of requests without waiting for their responses. This reduces the networking overhead and can result in significant performance gains.
+Redis 也支持管道。通常，一个客户端向 Redis 发送一个请求，然后在下次请求之前会等待返回。而用管道你可以发送一堆请求而不用等待它们的响应。这不单降低了网络开销，也在性能上有显著提高。
 
-It's worth noting that Redis will use memory to queue up the commands, so it's a good idea to batch them. How large a batch you use will depend on what commands you are using, and more specifically, how large the parameters are. But, if you are issuing commands against ~50 character keys, you can probably batch them in thousands or tens of thousands.
+值得指出的是， Redis 会用内存给命令排队，因此一个好办法是给它们做批处理。你需要根据你使用的命令来决定批处理应该有多大，更具体就是，用多大的参数。不过，如果你用的是 ~50 字符长度的 key 的话，你大约可以把批处理规模放宽到几千或者上万。
 
-Exactly how you execute commands within a pipeline will vary from driver to driver. In Ruby you pass a block to the `pipelined` method:
+在管道中执行命令的顺序根据驱动不同而不同。比如在 Ruby 中你给 `pipelined` 方法传入一个代码块:
 
 	redis.pipelined do
 	  9001.times do
@@ -390,7 +390,7 @@ Exactly how you execute commands within a pipeline will vary from driver to driv
 	  end
 	end
 
-As you can probably guess, pipelining can really speed up a batch import!
+如你所想，批处理导入会真的被管道给加速了。
 
 ## Transactions
 
