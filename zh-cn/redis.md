@@ -321,30 +321,30 @@ Logarithmic, 或者说 O(log(N)), 应该是第二快的，因为它需要扫描�
 
 ## Pseudo Multi Key Queries
 
-A common situation you'll run into is wanting to query the same value by different keys. For example, you might want to get a user by email (for when they first log in) and also by id (after they've logged in). One horrible solution is to duplicate your user object into two string values:
+一个常见的情况是，你会想用不同关键字查到同样的值。比如说，你想用找一个用户，通过他的(比如说他第一次登陆的时候) 或者通过 id (当他已经登陆之后)。一个很糟糕的做法是，你用两条一样的字符串来保存冗余的用户对象:
 
 	set users:leto@dune.gov '{"id": 9001, "email": "leto@dune.gov", ...}'
 	set users:9001 '{"id": 9001, "email": "leto@dune.gov", ...}'
 
-This is bad because it's a nightmare to manage and it takes twice the amount of memory.
+超烂的原因是你要维护这些数据的时候将是一个噩梦，并且它们会占用你两倍内存。
 
-It would be nice if Redis let you link one key to another, but it doesn't (and it probably never will). A major driver in Redis' development is to keep the code and API clean and simple. The internal implementation of linking keys (there's a lot we can do with keys that we haven't talked about yet) isn't worth it when you consider that Redis already provides a solution: hashes.
+如果 Redis 允许你把一个 key 链接到映射一个的话，那就最好了，可是不能(并且应该永远也不可能)。Reids 开发的一个主要驱动就是要保持代码和 API 的简洁。内部实现链接 key (还有好多我们可以用 key 来做的事情没说到呢) 毫无意义，如果你意识到 Redis 提供的另一个方案的话: 哈希结构
 
-Using a hash, we can remove the need for duplication:
+使用哈希结构，我们可以删除冗余内容:
 
 	set users:9001 '{"id": 9001, "email": "leto@dune.gov", ...}'
 	hset users:lookup:email leto@dune.gov 9001
 
-What we are doing is using the field as a pseudo secondary index and referencing the single user object. To get a user by id, we issue a normal `get`:
+我们要做的仅仅是用字段作为伪二阶索引，并把它指向用户对象。如想通过 id 获取 用户，我们可以用普通的 `get`:
 
 	get users:9001
 
-To get a user by email, we issue an `hget` followed by a `get` (in Ruby):
+想要通过 email 来获取用户，我们用 `hget` 配合 `get` (Ruby):
 
 	id = redis.hget('users:lookup:email', 'leto@dune.gov')
 	user = redis.get("users:#{id}")
 
-This is something that you'll likely end up doing often. To me, this is where hashes really shine, but it isn't an obvious use-case until you see it.
+这样的操作以后会经常用到，这就是哈希结构真正厉害的地方，不过如果你没这种需求，似乎这也不是一个很明确的用例。
 
 ## References and Indexes
 
