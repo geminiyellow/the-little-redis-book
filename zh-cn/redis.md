@@ -254,25 +254,25 @@ Redis 还支持虚拟内存。但是，这个功能貌似是失败了(Redis 开�
 
 ## Sets
 
-Sets are used to store unique values and provide a number of set-based operations, like unions. Sets aren't ordered but they provide efficient value-based operations. A friend's list is the classic example of using a set:
+集合结构被用于存储唯一值，并且提供了一组基于集合的操作，比如说并集运算。集合是无序的，但是它提供了许多高效的基于值的操作。朋友圈就是最经典的使用集合的例子了:
 
 	sadd friends:leto ghanima paul chani jessica
 	sadd friends:duncan paul jessica alia
 
-Regardless of how many friends a user has, we can efficiently tell (O(1)) whether userX is a friend of userY or not:
+不管一个用户有多少个朋友，我们都可以迅速的说出 (O(1)) userX 是否是 userY 的朋友:
 
 	sismember friends:leto jessica
 	sismember friends:leto vladimir
 
-Furthermore we can see whether two or more people share the same friends:
+而且我们可以看看是否两个或者多个用户之间是否有共同好友:
 
 	sinter friends:leto friends:duncan
 
-and even store the result at a new key:
+甚至直接可以把这个结果存到一个新 key 中:
 
 	sinterstore friends:leto_duncan friends:leto friends:duncan
 
-Sets are great for tagging or tracking any other properties of a value for which duplicates don't make any sense (or where we want to apply set operations such as intersections and unions).
+集合非常适用于这种难解的情况:需要标记或者跟踪那些有重复属性的值的时候(或者我们希望使用集合的交并操作的时候)。
 
 ## Sorted Sets
 
