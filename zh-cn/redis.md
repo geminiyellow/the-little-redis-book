@@ -296,27 +296,27 @@ Redis 还支持虚拟内存。但是，这个功能貌似是失败了(Redis 开�
 
 # 第三章 - 数据结构用例
 
-In the previous chapter we talked about the five data structures and gave some examples of what problems they might solve. Now it's time to look at a few more advanced, yet common, topics and design patterns.
+上一章中我们介绍了五种数据结构并针对他们适用的情况给出了一些例子。现在我们来看看高级，更通用，的话题和设计模式。
 
 ## Big O Notation
 
-Throughout this book we've made references to the Big O notation in the form of O(n) or O(1). Big O notation is used to explain how something behaves given a certain number of elements. In Redis, it's used to tell us how fast a command is based on the number of items we are dealing with.
+在本书中，我们用 `O(n)` 或 `O(1)` 来表示 `Big O notation`。Big O notation 用于表示，处理某事物时基于指定处理元素的数量，将会出现怎样特定的行为。在 Redis 中，用它来表示，基于我们处理的数据的数量，命令执行的速度将会如何。
 
-Redis documentation tells us the Big O notation for each of its commands. It also tells us what the factors are that influence the performance. Let's look at some examples.
+Redis 文档给出了它的每个命令的 Big O notation。它还告诉我们影响性能的因素是什么。让我们来看看例子。
 
-The fastest anything can be is O(1) which is a constant. Whether we are dealing with 5 items or 5 million, you'll get the same performance. The `sismember` command, which tells us if a value belongs to a set, is O(1). `sismember` is a powerful command, and its performance characteristics are a big reason for that. A number of Redis commands are O(1).
+最快的应该是 O(1) 了，一个常量。不管我们处理的是五条项目还是五百万条项目，你都会有同样的性能。`sismember` 命令，用于查询一个值是否属于一个集合，是 O(1)。`sismember` 是个强力的命令，很大一个原因就是快。Redis 中的大多数命令都是 O(1)。
 
-Logarithmic, or O(log(N)), is the next fastest possibility because it needs to scan through smaller and smaller partitions. Using this type of divide and conquer approach, a very large number of items quickly gets broken down in a few iterations. `zadd` is a O(log(N)) command, where N is the number of elements already in the sorted set.
+Logarithmic, 或者说 O(log(N)), 应该是第二快的，因为它需要还需要扫描越来越小的区间范围。通过使用这种类型的切分和处理方法，一个非常大的集合可以迅速的分解，仅需要做几次迭代。`zadd` 是一个 O(log(N)) 命令，N 是在有序集合中的元素个数。
 
-Next we have linear commands, or O(N). Looking for a non-indexed column in a table is an O(N) operation. So is using the `ltrim` command. However, in the case of `ltrim`, N isn't the number of elements in the list, but rather the elements being removed. Using `ltrim` to remove 1 item from a list of millions will be faster than using `ltrim` to remove 10 items from a list of thousands. (Though they'll probably both be so fast that you wouldn't be able to time it.)
+之后是线性命令，或者说 O(N)。在表中查找没有做索引的列就是一个 O(N) 操作。就像用 `ltrim` 命令一样。但是，在 `ltrim` 中，N 不是列表的元素个数，而是要移除的元素的个数。比如用 `ltrim` 从有百万项目的列表中移除一条，会比从一个只有一千条项目的列表中移除十条要快。(虽然都挺快，可能快到你根本就测不到它们的差别)。
 
-`zremrangebyscore` which removes elements from a sorted set with a score between a minimum and a maximum value has a complexity of O(log(N)+M). This makes it a mix. By reading the documentation we see that N is the number of total elements in the set and M is the number of elements to be removed. In other words, the number of elements that'll get removed is probably going to be more significant, in terms of performance, than the total number of elements in the set.
+`zremrangebyscore` 用来从有序列表中删除那些权重在最小值和最高值之间的元素，拥有复杂度 O(log(N)+M)。这有点复杂。通过查阅文档我们可以看到 N 是集合中所有的元素的个数，而 M 是需要删除的元素的个数。也就是说，在性能方面，比起集合中所有元素的个数，需要删除的元素的个数对性能影响更明显。
 
-The `sort` command, which we'll discuss in greater detail in the next chapter has a complexity of O(N+M*log(M)). From its performance characteristic, you can probably tell that this is one of Redis' most complex commands.
+`sort` 命令，我们在下一章会进行更详细的讨论，在这里我们要知道它有复杂度 O(N+M*log(M))。从它的性能特点来说，我们可以这样说，它是 Redis 最复杂命令中的一个。
 
-There are a number of other complexities, the two remaining common ones are O(N^2) and O(C^N). The larger N is, the worse these perform relative to a smaller N. None of Redis' commands have this type of complexity.
+还有另外一些复杂度，这里还有两个比较常用的是 O(N^2) 和 O(C^N)。N 越大，性能越差。Redis 没有这种复杂度的命令。
 
-It's worth pointing out that the Big O notation deals with the worst case. When we say that something takes O(N), we might actually find it right away or it might be the last possible element.
+值得指出的是，Big O notation 说的是最坏情况。比如我们说某操作的复杂性是 O(N)，那我们就有可能一开始就找到它或者在最后才找到它。
 
 
 ## Pseudo Multi Key Queries
