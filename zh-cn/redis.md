@@ -394,39 +394,39 @@ Redis 也支持管道。通常，一个客户端向 Redis 发送一个请求，�
 
 ## Transactions
 
-Every Redis command is atomic, including the ones that do multiple things. Additionally, Redis has support for transactions when using multiple commands.
+Redis 所有的命令都是原子性的，包括那些一次可以执行多项操作的命令也一样。并且，在使用多命令的时候，Redis 支持事务。
 
-You might not know it, but Redis is actually single-threaded, which is how every command is guaranteed to be atomic. While one command is executing, no other command will run. (We'll briefly talk about scaling in a later chapter.) This is particularly useful when you consider that some commands do multiple things. For example:
+你可能不知道，但是 Redis 确实是单线程的，这就是为什么每个命令都是原子性的原因。一次只能执行一个命令，其他的命令不能执行。(We'll briefly talk about scaling in a later chapter.) 这在你考虑用那些一次可执行多项操作的命令时候特别有用。比如说:
 
-`incr` is essentially a `get` followed by a `set`
+`incr` 实际上是一个 `get` 后面跟个 `set`
 
-`getset` sets a new value and returns the original
+`getset` 设置一个新值之后返回原值
 
-`setnx` first checks if the key exists, and only sets the value if it does not
+`setnx` 首先检查 key 是否存在，当它不存在的时候设值
 
-Although these commands are useful, you'll inevitably need to run multiple commands as an atomic group. You do so by first issuing the `multi` command, followed by all the commands you want to execute as part of the transaction, and finally executing `exec` to actually execute the commands or `discard` to throw away, and not execute the commands. What guarantee does Redis make about transactions?
+虽然这些命令很有用，但不可避免的，你肯定会遇到需要以组为单位执行多个命令的情况。首先你需要 `multi` 命令，然后接下来是你希望作为一组事务执行的所有命令，最后用 `exec` 来实际执行命令，或者用 `discard` 来放弃取消执行所有的命令。Redis 的事务可以保证什么？
 
-* The commands will be executed in order
+* 命令将被顺序执行
 
-* The commands will be executed as a single atomic operation (without another client's command being executed halfway through)
+* 命令组将以单原子模式执行(命令组执行途中不会插入别的客户端的命令操作)
 
-* That either all or none of the commands in the transaction will be executed
+* 在事务中的命令，要么全部执行成功，要么全部执行失败
 
-You can, and should, test this in the command line interface. Also note that there's no reason why you can't combine pipelining and transactions.
+你可以，也应该，在命令行界面测试一下这个。Also note that there's no reason why you can't combine pipelining and transactions.
 
 	multi
 	hincrby groups:1percent balance -9000000000
 	hincrby groups:99percent balance 9000000000
 	exec
 
-Finally, Redis lets you specify a key (or keys) to watch and conditionally apply a transaction if the key(s) changed. This is used when you need to get values and execute code based on those values, all in a transaction. With the code above, we wouldn't be able to implement our own `incr` command since they are all executed together once `exec` is called. From code, we can't do:
+最后，Redis 允许你指定监视一个 key(或一组 key)，如果 key(s) 改变了，那将根据情况选择执行事务。这可以用于当你在同一个事务中需要取值，并基于取得结果执行操作的情况。上面的代码中，我们不能实现我们自己的 `incr` 命令，因为它们总是在 `exec` 执行之后一起执行。用代码来说就是，我们不能这样:
 
 	redis.multi()
 	current = redis.get('powerlevel')
 	redis.set('powerlevel', current + 1)
 	redis.exec()
 
-That isn't how Redis transactions work. But, if we add a `watch` to `powerlevel`, we can do:
+这不在 Redis 事务的责任范围之内。但是，如果我们加上 `watch` 给 `powerlevel`，我们可以这样:
 
 	redis.watch('powerlevel')
 	current = redis.get('powerlevel')
@@ -434,7 +434,7 @@ That isn't how Redis transactions work. But, if we add a `watch` to `powerlevel`
 	redis.set('powerlevel', current + 1)
 	redis.exec()
 
-If another client changes the value of `powerlevel` after we've called `watch` on it, our transaction will fail. If no client changes the value, the set will work. We can execute this code in a loop until it works.
+如果另一个客户端在我们在它上面调用了 `watch` 之后，改变了 `powerlevel` 的话，我们的事务将会失败。如果值没有变化，那么 set 将会起作用。我们可以在循环中不断执行这段代码直到它成功为止。
 
 ## Keys Anti-Pattern
 
