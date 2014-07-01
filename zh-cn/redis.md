@@ -438,18 +438,18 @@ Redis 所有的命令都是原子性的，包括那些一次可以执行多项�
 
 ## Keys Anti-Pattern
 
-In the next chapter we'll talk about commands that aren't specifically related to data structures. Some of these are administrative or debugging tools. But there's one I'd like to talk about in particular: the `keys` command. This command takes a pattern and finds all the matching keys. This command seems like it's well suited for a number of tasks, but it should never be used in production code. Why? Because it does a linear scan through all the keys looking for matches. Or, put simply, it's slow.
+在下一章中，我们将讨论一些和具体数据结构无关的命令。某些是关于管理或者调试工具的。不过在这里有一个我特别想说一说的是: `keys` 命令。该命令通过指定模式返回所有匹配的 key。这个命令看起来在某些情况下很适用，但是它绝对不应当用在产品代码中。为什么？因为它为了查找匹配的 key 会对所有的 key 做一个线性扫描。或者，简单的说，它慢死了。
 
-How do people try and use it? Say you are building a hosted bug tracking service. Each account will have an `id` and you might decide to store each bug into a string value with a key that looks like `bug:account_id:bug_id`. If you ever need to find all of an account's bugs (to display them, or maybe delete them if they delete their account), you might be tempted (as I was!) to use the `keys` command:
+那为什么有人会尝试用它？比如说你在做一个 bug 跟踪服务。每个账户有字段 `id` ，并且你想把每个 bug 存到一个字符串值里面去，对应的 key 看起来像 `bug:account_id:bug_id`。如果你需要找出一个账号下所有的 bug (显示它们，或者删除账号之后把 bug 一同删除),你应该试试 (因为我就这样!) 使用 `keys` 命令:
 
 	keys bug:1233:*
 
-The better solution is to use a hash. Much like we can use hashes to provide a way to expose secondary indexes, so too can we use them to organize our data:
+好一点的解决案是用哈希结构。就像我们可以用哈希来暴露二级索引那样，所以我们也可以用它来组织我们的数据:
 
 	hset bugs:1233 1 '{"id":1, "account": 1233, "subject": "..."}'
 	hset bugs:1233 2 '{"id":2, "account": 1233, "subject": "..."}'
 
-To get all the bug ids for an account we simply call `hkeys bugs:1233`. To delete a specific bug we can do `hdel bugs:1233 2` and to delete an account we can delete the key via `del bugs:1233`.
+为了取得一个账户下的所有 bug 标识符，我们只需要调用 `hkeys bugs:1233`。要删除指定 bug 我们可以 `hdel bugs:1233 2`，要删除账户的话我们可以通过 `del bugs:1233` 来删除 key。
 
 
 ## 小结
