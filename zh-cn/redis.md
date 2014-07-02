@@ -458,23 +458,23 @@ Redis 所有的命令都是原子性的，包括那些一次可以执行多项�
 
 # 第四章 - 数据结构以外
 
-While the five data structures form the foundation of Redis, there are other commands which aren't data structure specific. We've already seen a handful of these: `info`, `select`, `flushdb`, `multi`, `exec`, `discard`, `watch` and `keys`. This chapter will look at some of the other important ones.
+在 Redis 五种基本数据结构以外，还有一些命令是和数据结构没有关系的。我们已经看过一些了: `info`, `select`, `flushdb`, `multi`, `exec`, `discard`, `watch` 和 `keys`。本章再来看看其他的重要的一些。
 
 ## Expiration
 
-Redis allows you to mark a key for expiration. You can give it an absolute time in the form of a Unix timestamp (seconds since January 1, 1970) or a time to live in seconds. This is a key-based command, so it doesn't matter what type of data structure the key represents.
+Redis 允许你让一个 key 有效期。你可以以 Unix 时间戳格式指定一个具体的时间 (从1970年01月01日开始的秒数)或指定以秒为单位的存活时间。这是一个基于 key 的命令，因此它和 key 所对应的数据结构无关。
 
 	expire pages:about 30
 	expireat pages:about 1356933600
 
-The first command will delete the key (and associated value) after 30 seconds. The second will do the same at 12:00 a.m. December 31st, 2012.
+第一个命令会在三十秒后删除 key (当然包括关联的值) 。第二个会在2012年12月31日上午 12:00 删除 key。
 
-This makes Redis an ideal caching engine. You can find out how long an item has to live until via the `ttl` command and you can remove the expiration on a key via the `persist` command:
+这让 Redis 称为一个理想的缓存引擎。通过 `ttl` 命令，你可以找出一条数据还能活多久。通过 `persist` 命令你可以删除那些过期的数据:
 
 	ttl pages:about
 	persist pages:about
 
-Finally, there's a special string command, `setex` which lets you set a string and specify a time to live in a single atomic command (this is more for convenience than anything else):
+最后，还有一个特殊的字符串命令, `setex` 允许你在一个单独的原子命令中设置一个字符串并指定它的有效期 (这比什么都方便):
 
 	setex pages:about 30 '<h1>about us</h1>....'
 
