@@ -499,32 +499,32 @@ Redis 的列表结构有 `blpop` 和 `brpop` 命令，可以从列表中返回�
 
 ## Monitor and Slow Log
 
-The `monitor` command lets you see what Redis is up to. It's a great debugging tool that gives you insight into how your application is interacting with Redis. In one of your two redis-cli windows (if one is still subscribed, you can either use the `unsubscribe` command or close the window down and re-open a new one) enter the `monitor` command. In the other, execute any other type of command (like `get` or `set`). You should see those commands, along with their parameters, in the first window.
+`monitor` 命令让你监控 Redis 的状态。它是一个很棒的调试工具，能让你深入了解你的应用是怎样和 Redis 交互的。在你的两个 redis-cli 窗口中的一个 (如果它还在订阅状态，你可以用 `unsubscribe` 命令或者直接关掉窗口然后再开一个新的) 输入 `monitor` 命令。在另一个，执行其他的任意类型的命令 (比如 `get` 或者 `set`)。你可以看到这些命令，以及它们的参数，会在第一个窗口中显示。
 
-You should be wary of running monitor in production, it really is a debugging and development tool. Aside from that, there isn't much more to say about it. It's just a really useful tool.
+你应该注意不要在生产环境中使用监控命令，它就是一个调试和开发的工具而已。除此之外，没得说。它就是一个很棒的开发工具。
 
-Along with `monitor`, Redis has a `slowlog` which acts as a great profiling tool. It logs any command which takes longer than a specified number of **micro**seconds. In the next section we'll briefly cover how to configure Redis, for now you can configure Redis to log all commands by entering:
+和 `monitor`一起的，Redis 还有一个 `slowlog` ，也是一个很棒的性能分析工具。它会记录所有执行时间超过指定 **微**秒的命令。在下一章我们会概述怎样配置 Redis，不过现在你可以像这样配置 Redis ，对所有的命令做日志记录:
 
 	config set slowlog-log-slower-than 0
 
-Next, issue a few commands. Finally you can retrieve all of the logs, or the most recent logs via:
+然后，执行几个命令。然后你可以检索所有日志，或者最新日志，通过:
 
 	slowlog get
 	slowlog get 10
 
-You can also get the number of items in the slow log by entering `slowlog len`
+你可以获取 slow log 中记录条数，通过 `slowlog len`
 
-For each command you entered you should see four parameters:
+对你执行的每个命令，你可以看到四个参数:
 
-* An auto-incrementing id
+* 一个自增的 id
 
-* A Unix timestamp for when the command happened
+* 一个 Unix 时间戳，表示命令开始时间
 
-* The time, in microseconds, it took to run the command
+* 执行时间，用微秒表示的, 记录了执行总时间
 
-* The command and its parameters
+* 命令和它的参数
 
-The slow log is maintained in memory, so running it in production, even with a low threshold, shouldn't be a problem. By default it will track the last 1024 logs.
+slow log 在内存中维护，所以在生产环境中执行，即使使用低阈值，应该也没问题。默认，它会跟踪最新 1024 条日志。
 
 ## Sort
 
