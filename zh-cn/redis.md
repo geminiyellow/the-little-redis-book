@@ -589,17 +589,17 @@ Redis 会将我们指定的模式(用 `by` 标记部分) 中的 `*` ，用我们
 
 ## Scan
 
-在上一章，我们看到了如何使用 `keys` 命令，很有用，但是不应该用到生产环境中。Redis 2.8 引入了 `scan` 命令，它对生产环境是无害的。虽然 `scan` 的目的和 `keys` 类似，但是它们之间还是存在一些不同。说实话，大多数 *不同* 应当看成是 *特性*， but this is the cost of having a usable command.
+在上一章，我们看到了如何使用 `keys` 命令，它很有用，但是不应该用到生产环境中。Redis 2.8 引入了 `scan` 命令，它对生产环境是无害的。虽然 `scan` 的目的和 `keys` 类似，但是它们之间还是存在一些不同。说实话，大多数 *不同* 应当看成是 *特质*，但这是作为一个有用的命令所需的开销。
 
-首先在众多的不同中的的第一个是，一次调用 `scan` 无需返回所有匹配结果。Nothing strange about paged results; however, `scan` returns a variable number of results which cannot be precisely controlled. You can provide a `count` hint, which defaults to 10, but it's entirely possible to get more or less than the specified `count`.
+首先在众多的不同中的的第一个是，一次调用 `scan` 无需返回所有匹配结果。没什么奇怪的，就是一个被分页的结果;但是, `scan` 返回的结果条数不定，它不能被精确的控制。你可以用 `count` 选项，默认是 10，不过它完全有可能拿到比指定的 `count` 更多或更少的结果。
 
-和通过使用 `limit` 和 `offset`来实现分页不同，`scan` 使用 `cursor`。第一次你调用 `scan` you supply `0` as the cursor. 下面我们看看一个初始化调用 `scan` ，指定了匹配模式 (可选) 和命中计数 (可选):
+和通过使用 `limit` 和 `offset`来实现分页不同，`scan` 用 `cursor`。第一次调用 `scan` ，指定 `0` 作为游标。下面我们看看一个初始调用 `scan` 的例子，它指定了匹配模式 (可选) 和计数 (可选):
 
     scan 0 match bugs:* count 20
 
-作为返回值的一部分，`scan` 返回returns the next cursor to use. 或者，扫描返回 `0` 来标记结果的终点。注意Note that the next cursor value doesn't correspond to the result number or anything else which clients might consider useful.
+作为返回值的一部分，`scan` 返回下一个可用游标。或者，返回 `0` 来表示结果扫描结束。注意下一个游标的值，不代表结果的个数，也不是服务端可用的任何东西。
 
-A typical flow might look like this:
+一个典型的流程应该看起来像这样:
 
     scan 0 match bugs:* count 2
     > 1) "3"
@@ -609,13 +609,13 @@ A typical flow might look like this:
     > 2) 1) "bugs:124"
     >    2) "bugs:123"
 
-Our first call returned a next cursor (3) and one result. Our subsequent call, using the next cursor, returned the end cursor (0) and the final two results. The above is a *typical* flow. Since the `count` is merely a hint, it's possible for `scan` to return a next `cursor` (not 0) with no actual results. In other words, an empty result set doesn't signify that no additional results exist. Only a 0 cursor means that there are no additional results.
+第一次调用返回了下个游标(3)和一个结果。第二次调用，使用了这个游标(3)，返回了结束标记(0)和最后两条数据。这是个*典型的*流程。由于 `count` 只是一个提示，有可能 `scan` 返回下一个(非 0) `cursor` 时不带任何结果。也就是说，一个空结果集并不意味着没有其他的结果存在。只有一个 0 游标，才意味着没有更多的结果。
 
-On the positive side, `scan` is completely stateless from Redis' point of view. So there's no need to close a cursor and there's no harm in not fully reading a result. If you want to, you can stop iterating through results, even if Redis returned a valid next cursor.
+从好的一面看，站在 Redis 的角度来看， `scan` 是完全无状态的。因此不需要关闭游标，而且没有完全读取结果集也是无害的。如果你想，你可以随时终止遍历结果集，即使 Redis 返回一个有效的游标。
 
-There are two other things to keep in mind. First, `scan` can return the same key multiple times. It's up to you to deal with this (likely by keeping a set of already seen values). Secondly, `scan` only guarantees that values which were present during the entire duration of iteration will be returned. If values get added or removed while you're iterating, they may or may not be returned. Again, this comes from `scan`'s statelessness; it doesn't take a snapshot of the existing values (like you'd see with many databases which provide strong consistency guarantees), but rather iterates over the same memory space which may or may not get modified.
+这有两点需要牢记。首先，`scan` 可以多次返回相同的 key 。你需要自己处理(比如说保存一个已有值集合)。其次，`scan` 只保证在迭代的整个持续过程中的存在值会被返回。如果在迭代中有值被添加或者被删除，新值可能被返回，旧值可能被忽略。再强调一次，这就是 `scan` 所谓的无状态; 它不会对存在值做快照(就像你在许多数据库中看到的那样，提供了强一致性保证)，仅仅是遍历同一块内存空间，不管空间有没有发生变更。
 
-除了 `scan` ,还添加了 `hscan`, `sscan` 和 `zscan` 命令。这可以让你便利哈希，集合和有序集。为什么需要这些命令？好吧，就像因为 `keys` 堵塞了其他所有的调用，于是有了哈希命令 `hgetall` 和集合命令 `smembers`。如果你想遍历一个非常大的哈希或集合，你可以考虑用这些命令。`zscan` 看起来没什么用，因为对一个有序集合分页，通过 `zrangebyscore` 或 `zrangebyrank` 已经可以达到目的。不过，如果你真的想全遍历一个大的有序集合，`zscan` 也不是没有价值。
+除了 `scan` ,还添加了 `hscan`, `sscan` 和 `zscan` 命令。这可以让你遍历哈希，集合和有序集。为什么需要这些命令？好吧，就像因为 `keys` 堵塞了其他所有的调用，于是有了哈希命令 `hgetall` 和集合命令 `smembers`。如果你想遍历一个非常大的哈希或集合，你可以考虑用这些命令。`zscan` 看起来没什么用，因为对一个有序集合分页，通过 `zrangebyscore` 或 `zrangebyrank` 已经可以达到目的。不过，如果你真的想全遍历一个大的有序集合，`zscan` 也不是没有价值。
 
 ## 小结
 
