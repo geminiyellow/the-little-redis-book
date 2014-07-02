@@ -589,15 +589,15 @@ Redis 会将我们指定的模式(用 `by` 标记部分) 中的 `*` ，用我们
 
 ## Scan
 
-In the previous chapter, we saw how the `keys` command, while useful, shouldn't be used in production. Redis 2.8 introduces the `scan` command which is production-safe. Although `scan` fulfills a similar purpose to `keys` there are a number of important difference. To be honest, most of the *differences* will seem like *idiosyncrasies*, but this is the cost of having a usable command.
+在上一章，我们看到了如何使用 `keys` 命令，很有用，但是不应该用到生产环境中。Redis 2.8 引入了 `scan` 命令，它对生产环境是无害的。虽然 `scan` 的目的和 `keys` 类似，但是它们之间还是存在一些不同。说实话，大多数 *不同* 应当看成是 *特性*， but this is the cost of having a usable command.
 
-First amongst these differences is that a single call to `scan` doesn't necessarily return all matching results. Nothing strange about paged results; however, `scan` returns a variable number of results which cannot be precisely controlled. You can provide a `count` hint, which defaults to 10, but it's entirely possible to get more or less than the specified `count`.
+首先在众多的不同中的的第一个是，一次调用 `scan` 无需返回所有匹配结果。Nothing strange about paged results; however, `scan` returns a variable number of results which cannot be precisely controlled. You can provide a `count` hint, which defaults to 10, but it's entirely possible to get more or less than the specified `count`.
 
-Rather than implementing paging through a `limit` and `offset`, `scan` uses a `cursor`. The first time you call `scan` you supply `0` as the cursor. Below we see an initial call to `scan` with an pattern match (optional) and a count hint (optional):
+和通过使用 `limit` 和 `offset`来实现分页不同，`scan` 使用 `cursor`。第一次你调用 `scan` you supply `0` as the cursor. 下面我们看看一个初始化调用 `scan` ，指定了匹配模式 (可选) 和命中计数 (可选):
 
     scan 0 match bugs:* count 20
 
-As part of its reply, `scan` returns the next cursor to use. Alternatively, scan returns `0` to signify the end of results. Note that the next cursor value doesn't correspond to the result number or anything else which clients might consider useful.
+作为返回值的一部分，`scan` 返回returns the next cursor to use. 或者，扫描返回 `0` 来标记结果的终点。注意Note that the next cursor value doesn't correspond to the result number or anything else which clients might consider useful.
 
 A typical flow might look like this:
 
@@ -615,7 +615,7 @@ On the positive side, `scan` is completely stateless from Redis' point of view. 
 
 There are two other things to keep in mind. First, `scan` can return the same key multiple times. It's up to you to deal with this (likely by keeping a set of already seen values). Secondly, `scan` only guarantees that values which were present during the entire duration of iteration will be returned. If values get added or removed while you're iterating, they may or may not be returned. Again, this comes from `scan`'s statelessness; it doesn't take a snapshot of the existing values (like you'd see with many databases which provide strong consistency guarantees), but rather iterates over the same memory space which may or may not get modified.
 
-In addition to `scan`, `hscan`, `sscan` and `zscan` commands were also added. These let you iterate through hashes, sets and sorted sets. Why are these needed? Well, just like `keys` blocks all other callers, so does the hash command `hgetall` and the set command `smembers`. If you want to iterate over a very large hash or set, you might consider making use of these commands. `zscan` might seem less useful since paging through a sorted set via `zrangebyscore` or `zrangebyrank` is already possible. However, if you want to fully iterate through a large sorted set, `zscan` isn't without value.
+除了 `scan` ,还添加了 `hscan`, `sscan` 和 `zscan` 命令。这可以让你便利哈希，集合和有序集。为什么需要这些命令？好吧，就像因为 `keys` 堵塞了其他所有的调用，于是有了哈希命令 `hgetall` 和集合命令 `smembers`。如果你想遍历一个非常大的哈希或集合，你可以考虑用这些命令。`zscan` 看起来没什么用，因为对一个有序集合分页，通过 `zrangebyscore` 或 `zrangebyrank` 已经可以达到目的。不过，如果你真的想全遍历一个大的有序集合，`zscan` 也不是没有价值。
 
 ## 小结
 
