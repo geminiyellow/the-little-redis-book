@@ -540,24 +540,24 @@ slow log 在内存中维护，所以在生产环境中执行，即使使用低�
 
 上面的命令演示了怎么对已排序记录分页 (通过 `limit`)，如何以降序返回结果 (通过 `desc`) 以及如何按照字典序排序而不是按照数值 (通过 `alpha`).
 
-The real power of `sort` is its ability to sort based on a referenced object. Earlier we showed how lists, sets and sorted sets are often used to reference other Redis objects. The `sort` command can dereference those relations and sort by the underlying value. For example, say we have a bug tracker which lets users watch issues. We might use a set to track the issues being watched:
+`sort` 真正强力的地方在于它可以对基于引用的对象进行排序。之前我们演示了列表，集合和有序集合是怎样用于引用其他 Redis 对象的。`sort` 命令可以解引用这些关系，并且根据值进行排序。比如，假设我们有一个 bug 跟踪系统，可以让用户查看异常。我们会用一个集合来跟踪被监控的异常:
 
 	sadd watch:leto 12339 1382 338 9338
 
-It might make perfect sense to sort these by id (which the default sort will do), but we'd also like to have these sorted by severity. To do so, we tell Redis what pattern to sort by. First, let's add some more data so we can actually see a meaningful result:
+可能通过 id 对异常进行排序很不错 (默认就是就这样做的)，可是我们也希望能按照严重度来排序的。于是，我们得告诉 Redis 用什么模式来排序。首先，让我们添加一些数据，这样可以让我们看到比较有意义的测试结果:
 
 	set severity:12339 3
 	set severity:1382 2
 	set severity:338 5
 	set severity:9338 4
 
-To sort the bugs by severity, from highest to lowest, you'd do:
+然后按照 bug 的严重度来排序，从高到低，你可以这样:
 
 	sort watch:leto by severity:* desc
 
-Redis will substitute the `*` in our pattern (identified via `by`) with the values in our list/set/sorted set. This will create the key name that Redis will query for the actual values to sort by.
+Redis 会将我们指定的模式(用 `by` 标记部分) 中的 `*` ，用我们的列表/集合/有序集的值来替换。然后 Redis 会以此创建 key 名，查询实际值之后再根据结果进行排序。
 
-Although you can have millions of keys within Redis, I think the above can get a little messy. Thankfully `sort` can also work on hashes and their fields. Instead of having a bunch of top-level keys you can leverage hashes:
+虽然你可以有上百万的 key 在 Redis 中，但是我觉得上面还是有点乱了。幸好 `sort` 对哈希结构和它的字段也有用。你可以利用哈希结构取代一堆顶级 key:
 
 	hset bug:12339 severity 3
 	hset bug:12339 priority 1
@@ -575,17 +575,17 @@ Although you can have millions of keys within Redis, I think the above can get a
 	hset bug:9338 priority 2
 	hset bug:9338 details '{"id": 9338, ....}'
 
-Not only is everything better organized, and we can sort by `severity` or `priority`, but we can also tell `sort` what field to retrieve:
+不单事情变简单了，可以根据 `severity` 或 `priority`排序了，我们还可以告诉 `sort` 我们需要取什么值:
 
 	sort watch:leto by bug:*->priority get bug:*->details
 
-The same value substitution occurs, but Redis also recognizes the `->` sequence and uses it to look into the specified field of our hash. We've also included the `get` parameter, which also does the substitution and field lookup, to retrieve bug details.
+和刚才一样有做替换操作，不过 Redis 可以识别 `->` 序列，用它来查找我们哈希结构中指定的字段。我们还加入了 `get` 命令，同样有替换操作和字段查询，用于获取 bug 的详细信息。
 
-Over large sets, `sort` can be slow. The good news is that the output of a `sort` can be stored:
+对于大集合，`sort` 可能会慢。好消息是 `sort` 的输出结构可以保存起来:
 
 	sort watch:leto by bug:*->priority get bug:*->details store watch_by_priority:leto
 
-Combining the `store` capabilities of `sort` with the expiration commands we've already seen makes for a nice combo.
+`sort` 的 `store` 功能，以及我们已经学过的 `expiration` 命令，可以组成一个非常棒的组合。
 
 ## Scan
 
