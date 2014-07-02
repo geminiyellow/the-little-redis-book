@@ -503,7 +503,7 @@ Redis 的列表结构有 `blpop` 和 `brpop` 命令，可以从列表中返回�
 
 你应该注意不要在生产环境中使用监控命令，它就是一个调试和开发的工具而已。除此之外，没得说。它就是一个很棒的开发工具。
 
-和 `monitor`一起的，Redis 还有一个 `slowlog` ，也是一个很棒的性能分析工具。它会记录所有执行时间超过指定 **微**秒的命令。在下一章我们会概述怎样配置 Redis，不过现在你可以像这样配置 Redis ，对所有的命令做日志记录:
+和 `monitor`一起的，Redis 还有一个 `slowlog` ，也是一个很棒的性能分析工具。它会记录所有执行时间超过指定 **微**秒 的命令。在下一章我们会概述怎样配置 Redis，不过现在你可以像这样配置 Redis ，对所有的命令做日志记录:
 
 	config set slowlog-log-slower-than 0
 
@@ -520,7 +520,7 @@ Redis 的列表结构有 `blpop` 和 `brpop` 命令，可以从列表中返回�
 
 * 一个 Unix 时间戳，表示命令开始时间
 
-* 执行时间，用微秒表示的, 记录了执行总时间
+* 执行时间，用微秒表示的, 记录了命令执行总时间
 
 * 命令和它的参数
 
@@ -528,17 +528,17 @@ slow log 在内存中维护，所以在生产环境中执行，即使使用低�
 
 ## Sort
 
-One of Redis' most powerful commands is `sort`. It lets you sort the values within a list, set or sorted set (sorted sets are ordered by score, not the members within the set). In its simplest form, it allows us to do:
+`sort` 是Redis 最强力命令之一。它允许你对列表，集合，有序集合中的值进行排序 (有序集是依照权重排序的，而不是集合中的成员)。最简单的情况，它允许我们这样:
 
 	rpush users:leto:guesses 5 9 10 2 4 10 19 2
 	sort users:leto:guesses
 
-Which will return the values sorted from lowest to highest. Here's a more advanced example:
+将会返回从低到高顺序排列的值。还有一些更高级例子:
 
 	sadd friends:ghanima leto paul chani jessica alia duncan
 	sort friends:ghanima limit 0 3 desc alpha
 
-The above command shows us how to page the sorted records (via `limit`), how to return the results in descending order (via `desc`) and how to sort lexicographically instead of numerically (via `alpha`).
+上面的命令演示了怎么对已排序记录分页 (通过 `limit`)，如何以降序返回结果 (通过 `desc`) 以及如何按照字典序排序而不是按照数值 (通过 `alpha`).
 
 The real power of `sort` is its ability to sort based on a referenced object. Earlier we showed how lists, sets and sorted sets are often used to reference other Redis objects. The `sort` command can dereference those relations and sort by the underlying value. For example, say we have a bug tracker which lets users watch issues. We might use a set to track the issues being watched:
 
