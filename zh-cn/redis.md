@@ -480,21 +480,21 @@ Redis 允许你指定 key 的存活时间。你可以以 Unix 时间戳格式指
 
 ## Publication and Subscriptions
 
-Redis lists have an `blpop` and `brpop` command which returns and removes the first (or last) element from the list or blocks until one is available. These can be used to power a simple queue.
+Redis 的列表结构有 `blpop` 和 `brpop` 命令，可以从列表中返回并删除第一个(或最后一个)元素，或者堵塞到有可用元素为止。这可以用于作成简单的队列。
 
-Beyond this, Redis has first-class support for publishing messages and subscribing to channels. You can try this out yourself by opening a second `redis-cli` window. In the first window subscribe to a channel (we'll call it `warnings`):
+除了这个，Redis 对发布信息/订阅频道有着一流的支持。你可以打开第二个 `redis-cli` 自己试试看。在第一个窗口中订阅频道。(我们假设它叫 `warnings`):
 
 	subscribe warnings
 
-The reply is the information of your subscription. Now, in the other window, publish a message to the `warnings` channel:
+命令返回你订阅的信息。然后，在另外一个窗口中，发布一条信息到 `warnings` 频道:
 
 	publish warnings "it's over 9000!"
 
-If you go back to your first window you should have received the message to the `warnings` channel.
+如果你切回你的第一个窗口，你发现你接收到了 `warnings` 频道的消息。
 
-You can subscribe to multiple channels (`subscribe channel1 channel2 ...`), subscribe to a pattern of channels (`psubscribe warnings:*`) and use the `unsubscribe` and `punsubscribe` commands to stop listening to one or more channels, or a channel pattern.
+你可以订阅多个频道 (`subscribe channel1 channel2 ...`)，订阅某种模式的一组频道 (`psubscribe warnings:*`) 以及实用 `unsubscribe` 和 `punsubscribe` 命令来停止监听一个或者多个频道，或者某种模式的一组频道。
 
-Finally, notice that the `publish` command returned the value 1. This indicates the number of clients that received the message.
+最后，注意 `publish` 命令的返回值是 1。这是收到消息的客户端的个数。
 
 
 ## Monitor and Slow Log
