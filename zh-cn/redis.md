@@ -727,7 +727,7 @@ Redis 的 Lua 实现中附带了许多有用的库。尽管 `table.lib`, `string
 
 因为这个文件定义得很详细，我们不再进行重复说明。
 
-除了通过 `redis.conf` 文件对 Redis 进行配置，我们还可以通过 `config set` 命令来个别值进行配置。实际上，我们已经用过它了，在将 `slowlog-log-slower-than` 配置为 0 的时候。
+除了通过 `redis.conf` 文件对 Redis 进行配置外，我们还可以通过 `config set` 命令来个别值进行设置。实际上，我们已经用过它了，在之前将 `slowlog-log-slower-than` 设置为 0 的时候。
 
 这里还可以通过 `config get` 命令来显示配置中的值。该命令支持匹配模式。所以如果你想找出所有和 logging 有关的选项，可以这样:
 
