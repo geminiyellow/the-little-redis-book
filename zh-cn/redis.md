@@ -735,9 +735,9 @@ Redis 的 Lua 实现中附带了许多有用的库。尽管 `table.lib`, `string
 
 ## Authentication
 
-Redis 可以配置为需要密码。通过使用 `requirepass` 设置 (通过 `redis.conf` 文件或者 `config set` 命令)。当 `requirepass` 被设置(也就是密码), 客户端将需要使用 `auth password` 命令。
+Redis 可以配置为需要密码才可使用。通过使用 `requirepass` 设置 (用 `redis.conf` 文件或者 `config set` 命令)。当 `requirepass` 被设置(也就是密码), 客户端将需要使用 `auth password` 命令。
 
-一旦客户端被认证，它们可以对任何的数据库用任何的命令。包括使用 `flushall` 命令抹除所有数据库上的所有值。通过配置，你可以重命名混淆命令来达到一定程度的安全性:
+客户端被认证后，它们可以对任何的数据库用任何的命令。包括使用 `flushall` 命令抹除所有数据库上的所有值。通过配置，你可以重命名混淆命令来达到一定程度的安全性:
 
 	rename-command CONFIG 5ec4db169f9d4dddacbfb0c26ea7e5ef
 	rename-command FLUSHALL 1041285018a942a4922cbf76623b741e
