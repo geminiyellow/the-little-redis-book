@@ -623,21 +623,21 @@ Redis 会将我们指定的模式(用 `by` 标记部分) 中的 `*` ，用我们
 
 # 第五章 - Lua 脚本
 
-Redis 2.6 includes a built-in Lua interpreter which developers can leverage to write more advanced queries to be executed within Redis. It wouldn't be wrong of you to think of this capability much like you might view stored procedures available in most relational databases.
+Redis 2.6 开始内置 Lua 解析器，开发者可以用来为 Redis 编写更高级的查询。没错，就像你想的那样，这种功能和大多数关系型数据库提供的存储过程是一样的。
 
-The most difficult aspect of mastering this feature is learning Lua. Thankfully, Lua is similar to most general purpose languages, is well documented, has an active community and is useful to know beyond Redis scripting. This chapter won't cover Lua in any detail; but the few examples we look at should hopefully serve as a simple introduction.
+掌握该功能最难的部分是学习 Lua。幸好，Lua 和大多数通用语言一样，有好的文档，有一个活跃的社区，除了写 Redis 脚本外当然还有更强大的功能。本章不会涉及 Lua 的任何细节；不过我们看几个例子，希望可以当成是一个简单的介绍。
 
 ## Why?
 
-Before looking at how to use Lua scripting, you might be wondering why you'd want to use it. Many developers dislike traditional stored procedures, is this any different? The short answer is no. Improperly used, Redis' Lua scripting can result in harder to test code, business logic tightly coupled with data access or even duplicated logic.
+在开始学习如何使用 Lua 脚本之前，你会想，为什么需要用它。许多开发者并不喜欢传统的存储过程，这有什么不一样吗？简单的说，没有。使用不当的 Redis Lua 脚本会导致代码测试困难，逻辑和数据访问紧耦合，甚至是重复逻辑。
 
-Properly used however, it's a feature that can simplify code and improve performance. Both of these benefits are largely achieved by grouping multiple commands, along with some simple logic, into a custom-build cohesive function. Code is made simpler because each invocation of a Lua script is run without interruption and thus provides a clean way to create your own atomic commands (essentially eliminating the need to use the cumbersome `watch` command). It can improve performance by removing the need to return intermediary results - the final output can be calculated within the script.
+但是使用得当，它就是一种能力，可以简化代码提高性能。所有这些便利，很大程度上都是通过良好的组织多命令，一些简单的逻辑，结合到自定义方法中。由于 Lua 脚本执行时不能中断，因此提供了更简洁的方式来创建自己的原子性命令 (根本上避免了使用繁琐的 `watch` 命令)。它可以改善性能，通过移除那些需要返回的中间临时计算结果 - 最终输出结果可以在脚本中计算。
 
-The examples in the following sections will better illustrate these points.
+下一节给出的例子能更好的说明这些点。
 
 ## Eval
 
-The `eval` command takes a Lua script (as a string), the keys we'll be operating against, and an optional set of arbitrary arguments. Let's look at a simple example (executed from Ruby, since running multi-line Redis commands from its command-line tool isn't fun):
+`eval` 命令有一个 Lua 脚本参数 (字符串形式)，我们要操作的 key 组，以及一个可选附加参数。让我们看看一个简单的例子 (从 Ruby 执行，因为在 Redis 的命令行工具里面执行多行命令非常不爽):
 
     script = <<-eos
       local friend_names = redis.call('smembers', KEYS[1])
@@ -653,19 +653,19 @@ The `eval` command takes a Lua script (as a string), the keys we'll be operating
     eos
     Redis.new.eval(script, ['friends:leto'], ['m'])
 
-The above code gets the details for all of Leto's male friends. Notice that to call Redis commands within our script we use the `redis.call("command", ARG1, ARG2, ...)` method.
+上面的代码获取了 Leto 的所有男性朋友。注意在我们的脚本中调用 Redis 命令，需要用 `redis.call("command", ARG1, ARG2, ...)` 这种方式。
 
-If you are new to Lua, you should go over each line carefully. It might be useful to know that `{}` creates an empty `table` (which can act as either an array or a dictionary), `#TABLE` gets the number of elements in the TABLE, and `..` is used to concatenate strings.
+如果你是 Lua 新手，你应该认真看看每一行。知道下面这些对你的理解会有帮助的，比如 `{}` 创建一个空的 `table` (可以把它当成一个数组或者一个字典)， `#TABLE` 能拿到在表中的元素个数，然后 `..` 用来链接字符串。
 
-`eval` actually take 4 parameters. The second parameter should actually be the number of keys; however the Ruby driver automatically creates this for us. Why is this needed? Consider how the above looks like when executed from the CLI:
+`eval` 实际上应该有四个参数。第二个实际上是 key 参数的个数；Ruby 驱动自动为我们创建了。但为什么要这样？考虑一下上面的代码在 CLI 里应该是怎样的:
 
     eval "....." "friends:leto" "m"
     vs
     eval "....." 1 "friends:leto" "m"
 
-In the first (incorrect) case, how does Redis know which of the parameters are keys and which are simply arbitrary arguments? In the second case, there is no ambiguity.
+第一种情况 (不正确) 中，Redis 怎么知道哪些是 key 而哪些是可选附加参数？第二种情况中，不存在多义性。
 
-This brings up a second question: why must keys be explicitly listed? Every command in Redis knows, at execution time, which keys are going to needed. This will allow future tools, like Redis Cluster, to  distribute requests amongst multiple Redis servers. You might have spotted that our above example actually reads from keys dynamically (without having them passed to `eval`). An `hget` is issued on all of Leto's male friends. That's because the need to list keys ahead of time is more of a suggestion than a hard rule. The above code will run fine in a single-instance setup, or even with replication, but won't in the yet-released Redis Cluster.
+这引出了第二个问题:为什么要显式的把 key 列出来？所有 Redis 命令，在运行时，都会确定哪些 key 是需要的。这允许以后的一些工具，比如说 Redis 集群，可以在多个 Redis 服务器中正确分发请求。你可能已经发现，我们上面的代码其实是动态读取 key 的(没把它们传给 `eval`)。`hget` 可以拿到 Leto 的所有男性朋友。这就是为什么需要把 key 列出来，当然这更多是一个建议，而不是一个硬性规则。上述代码在一个单例中会运行得很好，或者在副本中，但是肯定不会在未发行的 Redis 集群中。
 
 ## Script Management
 
