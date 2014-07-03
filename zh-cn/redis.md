@@ -669,7 +669,7 @@ Redis 2.6 开始内置 Lua 解析器，开发者可以用来为 Redis 编写更�
 
 ## Script Management
 
-尽管通过 `eval` 执行的脚本会被 Redis 缓存起来，但是你想执行的时候，每次都把整个内容发送过去看起来会很傻。相反，你可以注册脚本到 Redis，然后用脚本的 key 来执行。这需要你用到 `script load` 命令，然后返回脚本的 SHA1 摘要:
+尽管通过 `eval` 执行的脚本会被 Redis 缓存起来，但是你在执行的时候，每次把整个内容发送过去看起来会很傻。或者，你可以把脚本注册到 Redis，然后通过脚本的 key 来执行。这需要你调用 `script load` 命令，然后拿到脚本的 SHA1 摘要:
 
     redis = Redis.new
     script_key = redis.script(:load, "THE_SCRIPT")
@@ -678,7 +678,7 @@ Redis 2.6 开始内置 Lua 解析器，开发者可以用来为 Redis 编写更�
 
     redis.evalsha(script_key, ['friends:leto'], ['m'])
 
-你可以用来管理 Lua 脚本的其他三个命令是 `script kill`, `script flush` 和 `script exists`。它们用来中断执行中的脚本，移除内部缓存中的所有脚本，以及查找在缓存中是否存在一个脚本。
+你可以用来管理 Lua 脚本的其他三个命令是 `script kill`, `script flush` 和 `script exists`。它们分别用来中断执行中的脚本，移除内部缓存中的所有脚本，以及查找在缓存中是否存在一个脚本。
 
 ## Libraries
 
