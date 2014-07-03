@@ -764,13 +764,13 @@ Redis 支持复制，意思是说，当你把数据写到一个 Redis 实例(主
 
 ## Scaling and Redis Cluster
 
-Replication is the first tool a growing site can leverage. Some commands are more expensive than others (`sort` for example) and offloading their execution to a slave can keep the overall system responsive to incoming queries.
+复制是那些负荷高速成长的网站用到的第一个工具。有些命令的开销比其他高(比如说 `sort` )，于是可以把它们放到从服务上执行，从而保持整个系统对传入的查询的响应。
 
-Beyond this, truly scaling Redis comes down to distributing your keys across multiple Redis instances (which could be running on the same box, remember, Redis is single-threaded). For the time being, this is something you'll need to take care of (although a number of Redis drivers do provide consistent-hashing algorithms). Thinking about your data in terms of horizontal distribution isn't something we can cover in this book. It's also something you probably won't have to worry about for a while, but it's something you'll need to be aware of regardless of what solution you use.
+此外，真正的扩展 Redis， 归结为横跨多个 Redis 实体(可以执行在同一个 box 中，记住，Redis 是单线程的)使用你的 key。就目前而言，这是你需要注意的东西(虽然许多 Redis 驱动都提供了 consistent-hashing 算法)。考虑如何将你的数据水平切分并不在本书的讨论范围之内。这些事情你也许也不需要担心，不过不管你用了什么解决案，总是需要意识到的。
 
-The good news is that work is under way on Redis Cluster. Not only will this offer horizontal scaling, including rebalancing, but it'll also provide automated failover for high availability.
+好消息是，Redis 群集中这些都可以实现。不单止提供水平扩展，包括均衡，还提供高可用性的自动失败转移。
 
-High availability and scaling is something that can be achieved today, as long as you are willing to put the time and effort into it. Moving forward, Redis Cluster should make things much easier.
+只要你愿意花更多的时间和精力，高可用性和扩展性在今天是完全可以做到的。以后，Redis 群集会让事情变得更简单。
 
 ## 小结
 
