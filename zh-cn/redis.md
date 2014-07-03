@@ -707,15 +707,15 @@ Redis 的 Lua 实现中附带了许多有用的库。尽管 `table.lib`, `string
 
 ## Atomic
 
-Since Redis is single-threaded, you don't have to worry about your Lua script being interrupted by another Redis command. One of the most obvious benefits of this is that keys with a TTL won't expire half-way through execution. If a key is present at the start of the script, it'll be present at any point thereafter - unless you delete it.
+由于 Redis 是单线程的，你不需要担心你的 Lua 脚本会被其他的 Redis 命令打断。其中一个最明显的好处就是，有 TTL 的 key 在执行中不会半路过期。如果在脚本开始的时候，key 存在，那么它会在之后一直存在 - 除非你把它删了。
 
 ## Administration
 
-The next chapter will talk about Redis administration and configuration in more detail. For now, simply know that the `lua-time-limit` defines how long a Lua script is allowed to execute before being terminated. The default is generous 5 seconds. Consider lowering it.
+下一章将更详细的讨论 Redis 的管理和配置。现在，你只要简单的知道，`lua-time-limit` 定义了一个 Lua 脚本最长可执行时间。默认的是五秒。考虑降低它。
 
 ## 小结
 
-本章介绍了 Redis 的 Lua 脚本功能。和其他任何事物一样，这个功能可能会被滥用。但是，谨慎使用，用以实现你所关注及自定义的命令时，不但可以简化你的代码，同时也可能会提高性能。Lua 脚本和 Redis 的其他功能/命令一样:你要作的仅仅是，如果需要，在一开始就使用它，然后你会发现它会用得越来越频繁熟练。
+本章介绍了 Redis 的 Lua 脚本功能。和其他任何事物一样，这个功能可能会被滥用。但是，谨慎使用，用以实现你所关注的和自定义的命令时，不但可以简化你的代码，还可以提高性能。Lua 脚本和 Redis 的其他功能/命令一样:你要作的仅仅是，如果需要，在一开始就使用它，然后你会发现它会用得越来越频繁熟练。
 
 # 第六章 - Administration
 
