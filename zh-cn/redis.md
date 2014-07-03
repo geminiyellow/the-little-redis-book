@@ -719,17 +719,17 @@ Redis 的 Lua 实现中附带了许多有用的库。尽管 `table.lib`, `string
 
 # 第六章 - Administration
 
-Our last chapter is dedicated to some of the administrative aspects of running Redis. In no way is this a comprehensive guide on Redis administration. At best we'll answer some of the more basic questions new users to Redis are most likely to have.
+我们的最后一章将用来讨论 Redis 使用中的一些管理方面的内容。这是一份不完全的 Redis 管理指南。我们尽可能的回答一些 Redis 新手最有可能遇到的基本问题。
 
 ## Configuration
 
-When you first launched the Redis server, it warned you that the `redis.conf` file could not be found. This file can be used to configure various aspects of Redis. A well-documented `redis.conf` file is available for each release of Redis. The sample file contains the default configuration options, so it's useful to both understand what the settings do and what their defaults are. You can find it at <http://download.redis.io/redis-stable/redis.conf>.
+当你第一次启动 Redis 服务器，它会提醒你，`redis.conf` 文件找不到。这个文件用于配置 Redis 的各方面。有一份对所有版本 Redis 都可用的通用 `redis.conf` 文档模板。该模板中包含了默认的配置选项，对于理解各种选项的作用以及选项的默认值都很有帮助。你可以在这里找到它: <http://download.redis.io/redis-stable/redis.conf>。
 
-Since the file is well-documented, we won't be going over the settings.
+因为这个文件定义得很详细，我们不再进行重复说明。
 
-In addition to configuring Redis via the `redis.conf` file, the `config set` command can be used to set individual values. In fact, we already used it when setting the `slowlog-log-slower-than` setting to 0.
+除了通过 `redis.conf` 文件对 Redis 进行配置，我们还可以通过 `config set` 命令来个别值进行配置。实际上，我们已经用过它了，在将 `slowlog-log-slower-than` 配置为 0 的时候。
 
-There's also the `config get` command which displays the value of a setting. This command supports pattern matching. So if we want to display everything related to logging, we can do:
+这里还可以通过 `config get` 命令来显示配置中的值。该命令支持匹配模式。所以如果你想找出所有和 logging 有关的选项，可以这样:
 
 	config get *log*
 
