@@ -29,6 +29,9 @@ Karl 还编写了 [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-
 
 ### 中文版本 ###
 Karl 在 [the-little-redis-book](https://github.com/karlseguin/the-little-redis-book) 的 Github 链接中给出了 [JasonLai256](https://github.com/JasonLai256) 的 [the-little-redis-book](https://github.com/JasonLai256/the-little-redis-book) 链接。但貌似 JasonLai256 最后一次更新是2012年了。内容上也和原文稍微有点出入，并且由于本人水平有限，无法提交自信正确的内容。因此重开一项目。如果你被搜索引擎引导到本工程，在此向你致歉，并希望有能力者且有时间者一同完善和同步本工程。你可以通过我的 邮箱 <geminiyellow@gmail.com> 来联系我，或者通过 [@geminiyellow](https://twitter.com/geminiyellow) 在 Twitter 上关注我。
+
+最新中文版本基于在 [karlseguin](https://github.com/karlseguin) Feb 9, 2014 提交的 [#36](https://github.com/karlseguin/the-little-redis-book/commit/3584df2c55ddcf9e2e3c06b3bd2d21723d3b1a54) SHA 是：3584df2c55ddcf9e2e3c06b3bd2d21723d3b1a54
+
 # 简介
 
 在过去的几年中，在数据持久化和查询领域，技术和工具以惊人的速度在发展。可以这样说，终于再也不是关系型数据库独霸天下了，也就是说，数据库生态圈开始繁荣起来。
