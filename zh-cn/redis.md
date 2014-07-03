@@ -746,22 +746,21 @@ Redis 可以配置为需要密码才可使用。通过使用 `requirepass` 设�
 
 ## Size Limitations
 
-As you start using Redis, you might wonder "how many keys can I have?" You might also wonder how many fields can a hash have (especially when you use it to organize your data), or how many elements can lists and sets have? Per instance, the practical limits for all of these is in the hundreds of millions.
-
+你开始用 Redis 的时候，你肯定会想知道 "我最多能用多少 key ？"，或者是想知道一个哈希结构里面最多能有多少字段(尤其当你考虑用它组织数据的时候)，或者每个列表结构或者集合能存多少元素？对每个 Redis 实例来说，所有的这些，实际的限制都达到了上亿(hundreds of millions)级别。
 
 ## Replication
 
-Redis supports replication, which means that as you write to one Redis instance (the master), one or more other instances (the slaves) are kept up-to-date by the master. To configure a slave you use either the `slaveof` configuration setting or the `slaveof` command (instances running without this configuration are or can be masters).
+Redis 支持复制，意思是说，当你把数据写到一个 Redis 实例(主服务)上的时候，一个或者多个实例(从服务)将会保持和主服务同步更新。配置从服务，可以通过修改配置文件的 `slaveof` 标签或者用 `slaveof` 命令(没有使用该配置的实例是或可以是主服务)。
 
-Replication helps protect your data by copying to different servers. Replication can also be used to improve performance since reads can be sent to slaves. They might respond with slightly out of date data, but for most apps that's a worthwhile tradeoff.
+复制通过把数据拷贝到不同的服务器上达到保护目的。复制还可以用于改善性能，因为读操作可以分发到从服务上。虽然可能会返回略微过期的数据，但是对于大多数应用来说，这是一个有价值的值得考虑的折中。
 
-Unfortunately, Redis replication doesn't yet provide automated failover. If the master dies, a slave needs to be manually promoted. Traditional high-availability tools that use heartbeat monitoring and scripts to automate the switch are currently a necessary headache if you want to achieve some sort of high availability with Redis.
+不过不幸的是，Redis 的复制还没提供自动故障转移。如果主服务挂了，你需要手动提升从服务。如果你希望实现 Redis 的高可用性，还是不得不考虑用传统的高可用性工具的心跳监控(heartbeat monitoring)以及用脚本自动切换当前服务器。
 
 ## Backups
 
-Backing up Redis is simply a matter of copying Redis' snapshot to whatever location you want (S3, FTP, ...). By default Redis saves its snapshot to a file named `dump.rdb`. At any point in time, you can simply `scp`, `ftp` or `cp` (or anything else) this file.
+备份 Redis 只需要简单的将 Redis 的快照拷贝到你想要的地方(S3, FTP, ...)。默认的，Redis 把它的快照保存在名为 `dump.rdb` 的文件中。随时，你都可以 `scp`, `ftp` 或者 `cp` (或别的什么) 这个文件。
 
-It isn't uncommon to disable both snapshotting and the append-only file (aof) on the master and let a slave take care of this. This helps reduce the load on the master and lets you set more aggressive saving parameters on the slave without hurting overall system responsiveness.
+在主服务上禁用快照或者禁用增量文件，让从服务去维护，这种做法并不少见。这有助于降低主服务器上的负载，并且允许在从服务上使用更积极的备份操作，而不会损害整个系统的响应速度。
 
 ## Scaling and Redis Cluster
 
