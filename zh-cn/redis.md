@@ -682,15 +682,15 @@ Redis 2.6 开始内置 Lua 解析器，开发者可以用来为 Redis 编写更�
 
 ## Libraries
 
-Redis' Lua implementation ships with a handful of useful libraries. While `table.lib`, `string.lib` and `math.lib` are quite useful, for me, `cjson.lib` is worth singling out. First, if you find yourself having to pass multiple arguments to a script, it might be cleaner to pass it as JSON:
+Redis 的 Lua 实现中附带了许多有用的库。尽管 `table.lib`, `string.lib` 和 `math.lib` 非常棒，对我来说，在这里我想单独拿出来强调的是 `cjson.lib` 。首先，如果你发现你需要向脚本传入多个参数的时候，以 JSON 格式将会显得更简洁:
 
     redis.evalsha ".....", [KEY1], [JSON.fast_generate({gender: 'm', ghola: true})]
 
-Which you could then deserialize within the Lua script as:
+然后你可以在 Lua 脚本中反序列化:
 
     local arguments = cjson.decode(ARGV[1])
 
-Of course, the JSON library can also be used to parse values stored in Redis itself. Our above example could potentially be rewritten as such:
+当然，这个 JSON 库还可以用来解析 Redis 自己保存的值。我们上面的例子可以这样改写:
 
       local friend_names = redis.call('smembers', KEYS[1])
       local friends = {}
@@ -703,7 +703,7 @@ Of course, the JSON library can also be used to parse values stored in Redis its
       end
       return friends
 
-Instead of getting the gender from specific hash field, we could get it from the stored friend data itself. (This is a much slower solution, and I personally prefer the original, but it does show what's possible).
+于是我们可以从保存的朋友数据本身来查找性别，而不是从指定的哈希字段。(这个解决案相当慢，我个人更喜欢原先的那个，但是它确实演示了什么另一可行方案)。
 
 ## Atomic
 
