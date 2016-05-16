@@ -56,11 +56,11 @@ Redis 本身并不正式支持 Windows ，但也有可用选项。你当然是�
 
 ## *nix 和 MacOSX 环境
 
-对于 *nix 和 Mac 用户，users, 从源码编译应该是你最好的选择。该版本，最新可用版本，在这里下载 <http://redis.io/download>。 编写本书时，最新版本是 2.6.2；用以下命令安装该版本:
+对于 *nix 和 Mac 用户，users, 从源码编译应该是你最好的选择。该版本，最新可用版本，在这里下载 <http://redis.io/download>。 编写本书时，最新版本是 3.0.3；用以下命令安装该版本:
 
-	wget http://redis.googlecode.com/files/redis-2.6.2.tar.gz
-	tar xzf redis-2.6.2.tar.gz
-	cd redis-2.6.2
+	wget http://download.redis.io/releases/redis-3.0.3.tar.gz
+	tar xzf redis-3.0.3.tar.gz
+	cd redis-3.0.3
 	make
 
 (当然，Redis 也可以通过各种包管理工具安装。比如说，MacOSX 用户通过 Homebrew 安装,只需要简单输入 `brew install redis`即可。)
