@@ -51,11 +51,11 @@ Another solution, which has been available for some time, can be found at <https
 
 ## On *nix and MacOSX
 
-For *nix and Mac users, building it from source is your best option. The instructions, along with the latest version number, are available at <http://redis.io/download>. At the time of this writing the latest version is 2.6.2; to install this version we would execute:
+For *nix and Mac users, building it from source is your best option. The instructions, along with the latest version number, are available at <http://redis.io/download>. At the time of this writing the latest version is 3.0.3; to install this version we would execute:
 
-	wget http://redis.googlecode.com/files/redis-2.6.2.tar.gz
-	tar xzf redis-2.6.2.tar.gz
-	cd redis-2.6.2
+	wget http://download.redis.io/releases/redis-3.0.3.tar.gz
+	tar xzf redis-3.0.3.tar.gz
+	cd redis-3.0.3
 	make
 
 (Alternatively, Redis is available via various package managers. For example, MacOSX users with Homebrew installed can simply type `brew install redis`.)
@@ -140,7 +140,7 @@ Redis did add support for virtual memory. However, this feature has been seen as
 
 ## Putting It Together
 
-We've touched on a number of high level topics. The last thing I want to do before diving into Redis is bring some of those topics together. Specifically, query limitations, data structures and Redis' way to store data in memory.
+We've touched on a number of high level topics. The last thing I want to do before diving into Redis is to bring some of those topics together. Specifically, query limitations, data structures and Redis' way to store data in memory.
 
 When you add those three things together you end up with something wonderful: speed. Some people think "Of course Redis is fast, everything's in memory." But that's only part of it. The real reason Redis shines versus other solutions is its specialized data structures.
 
